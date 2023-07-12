@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "536872950774",
+    "project_id": "macros-4a030",
+    "storage_bucket": "macros-4a030.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:536872950774:android:10ffc1475aa181ab90c5d7",
+        "android_client_info": {
+          "package_name": "com.example.macros"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "536872950774-eqsc9kd94meflntncrkv8j5tdd30dega.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.macros",
+            "certificate_hash": "7db85b70eb7d420ddc8a2cad78faad26d15ed5b1"
+          }
+        },
+        {
+          "client_id": "536872950774-5q5cma13mh9m0mtp01pvktlitgc950j1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBec69GHwmU8R3efDhvUB3p8EH3b0qKAA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "536872950774-5q5cma13mh9m0mtp01pvktlitgc950j1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

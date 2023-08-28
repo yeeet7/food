@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.macros">
+    package="com.yeeet.food">
    <application
         android:label="macros"
         android:name="${applicationName}"

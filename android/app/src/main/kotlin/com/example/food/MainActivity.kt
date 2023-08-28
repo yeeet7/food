@@ -1,4 +1,4 @@
-package com.example.macros
+package com.yeeet.food
 
 import io.flutter.embedding.android.FlutterActivity
 

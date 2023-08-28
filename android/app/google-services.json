@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "536872950774",
-    "project_id": "macros-4a030",
-    "storage_bucket": "macros-4a030.appspot.com"
+    "project_number": "581024266466",
+    "project_id": "food-c4c82",
+    "storage_bucket": "food-c4c82.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:536872950774:android:10ffc1475aa181ab90c5d7",
+        "mobilesdk_app_id": "1:581024266466:android:16c40a6fa44ebcf91446bb",
         "android_client_info": {
-          "package_name": "com.example.macros"
+          "package_name": "com.yeeet.food"
         }
       },
       "oauth_client": [
         {
-          "client_id": "536872950774-eqsc9kd94meflntncrkv8j5tdd30dega.apps.googleusercontent.com",
+          "client_id": "581024266466-c5qq019mbo608fm313dlhohfut59nkvn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.macros",
+            "package_name": "com.yeeet.food",
             "certificate_hash": "7db85b70eb7d420ddc8a2cad78faad26d15ed5b1"
           }
         },
         {
-          "client_id": "536872950774-5q5cma13mh9m0mtp01pvktlitgc950j1.apps.googleusercontent.com",
+          "client_id": "581024266466-n1mo02ggb87mokji7v5oob1bihi7c0sv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBec69GHwmU8R3efDhvUB3p8EH3b0qKAA4"
+          "current_key": "AIzaSyC1RYlSUD5oTM0xaXtboMoBC3feBdmyb48"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "536872950774-5q5cma13mh9m0mtp01pvktlitgc950j1.apps.googleusercontent.com",
+              "client_id": "581024266466-n1mo02ggb87mokji7v5oob1bihi7c0sv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

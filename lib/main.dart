@@ -2,7 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food/widgets/circular_percent_indicator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:food/profile.dart';
 import 'package:food/login.dart';
@@ -22,10 +22,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Macros',
+      title: 'Food',
       themeMode: ThemeMode.system,
-      theme: ThemeData(primarySwatch: Colors.green,),
-      darkTheme: ThemeData.dark().copyWith(primaryColor: Colors.green),
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: const Color(0xFFffffff),
+        colorScheme: const ColorScheme.dark(
+          secondary: Color(0xFFe8e8e8),
+          primary: Color(0xFFffffff),
+        ),
+        primaryColor: const Color(0xFFff6b6b)
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF101010),
+        colorScheme: const ColorScheme.dark(
+          secondary: Color(0xFF171717),
+          primary: Color(0xFF101010),
+        ),
+        primaryColor: const Color(0xFF6B0000)
+      ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.userChanges(),
         builder: (context, snapshot) {
@@ -47,38 +61,46 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
-  
-  final main = const Main();
-  final profile = const Profile();
-
-  int currentIndex =  0;
-
+class _AppState extends State<App> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      body: [main, profile][currentIndex],
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        actions: [
+          Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.all(15/2),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(80)
+            ),
+            child: Material(
+              borderRadius: BorderRadius.circular(80),
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(80),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile())),
+                child: FirebaseAuth.instance.currentUser?.photoURL != null ? Image.network(FirebaseAuth.instance.currentUser!.photoURL!) : null
+              )
+            )
+          ),
+        ],
+      ),
 
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Theme.of(context).primaryColor,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        items: const [
-          BottomNavigationBarItem(label: 'Home', icon: Icon(FontAwesomeIcons.calendarCheck)),
-          BottomNavigationBarItem(label: 'Profile', icon: Icon(FontAwesomeIcons.user)),
-        ]
+      body: Center(
+        child: CircularPercentIndicator(
+          0.7,
+          shouldAnimate: true,
+          animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 400))..forward(),
+          fgColor: Theme.of(context).primaryColor,
+          bgColor: Theme.of(context).colorScheme.secondary,
+          center: const Text('70%'),
+        ),
       ),
 
     );
-  }
-}
-
-class Main extends StatelessWidget {
-  const Main({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

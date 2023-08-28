@@ -17,7 +17,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
 
       body: CupertinoButton(
-        child: const Text('sign out'),
+        child: Text('sign out', style: TextStyle(color: Theme.of(context).primaryColor),),
         onPressed: () async {
           await googleSignIn.signOut();
           await FirebaseAuth.instance.signOut();

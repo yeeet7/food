@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food/food/add_food.dart';
 import 'package:food/widgets/circular_percent_indicator.dart';
 import 'package:food/widgets/linear_percent_indicator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:food/profile.dart';
-import 'package:food/login.dart';
+import 'package:food/start/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -128,7 +129,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       CircularPercentIndicator(
                         0.9,
                         shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..ForwardAfter(100),
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(100),
                         fgColor: Theme.of(context).primaryColor,
                         bgColor: Theme.of(context).colorScheme.secondary,
                         center: Column(
@@ -142,7 +143,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       CircularPercentIndicator(
                         0.6,
                         shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..ForwardAfter(200),
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(200),
                         fgColor: Colors.blue.shade700,
                         bgColor: Theme.of(context).colorScheme.secondary,
                         center: Column(
@@ -156,7 +157,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       CircularPercentIndicator(
                         0.3,
                         shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..ForwardAfter(300),
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(300),
                         fgColor: Colors.green.shade800,
                         bgColor: Theme.of(context).colorScheme.secondary,
                         center: Column(
@@ -174,6 +175,13 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             ),
           ],
         ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'FAB',
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFood())),
       ),
 
     );
@@ -224,5 +232,5 @@ class DefaultBox extends StatelessWidget {
 }
 
 extension on AnimationController {
-  Future<void> ForwardAfter(int milliseconds) async => await Future.delayed(Duration(milliseconds: milliseconds), () => forward());
+  Future<void> forwardAfter(int milliseconds) async => await Future.delayed(Duration(milliseconds: milliseconds), () => forward());
 }

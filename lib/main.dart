@@ -2,7 +2,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/widgets/circular_percent_indicator.dart';
+import 'package:food/widgets/linear_percent_indicator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:food/profile.dart';
 import 'package:food/login.dart';
@@ -30,7 +32,8 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFFe8e8e8),
           primary: Color(0xFFffffff),
         ),
-        primaryColor: const Color(0xFFff6b6b)
+        primaryColor: const Color(0xFFff6b6b),
+        useMaterial3: true
       ),
       darkTheme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF101010),
@@ -38,7 +41,8 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFF171717),
           primary: Color(0xFF101010),
         ),
-        primaryColor: const Color(0xFF6B0000)
+        primaryColor: const Color(0xFF6B0000),
+        useMaterial3: true
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.userChanges(),
@@ -90,17 +94,131 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         ],
       ),
 
-      body: Center(
-        child: CircularPercentIndicator(
-          0.7,
-          shouldAnimate: true,
-          animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 400))..forward(),
-          fgColor: Theme.of(context).primaryColor,
-          bgColor: Theme.of(context).colorScheme.secondary,
-          center: const Text('70%'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            DefaultBox(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Icon(FontAwesomeIcons.fireFlameCurved),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Calories: ${(2600*0.7).round()} kcal  /  2600 kcal'),
+                          LinearPercentIndicator(
+                            0.7,
+                            MediaQuery.of(context).size.width - 84,
+                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                            fgColor: Colors.orange,
+                            inside: const Text('70%'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CircularPercentIndicator(
+                        0.9,
+                        shouldAnimate: true,
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                        fgColor: Theme.of(context).primaryColor,
+                        bgColor: Theme.of(context).colorScheme.secondary,
+                        center: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('90%', style: TextStyle(color: Theme.of(context).primaryColor),),
+                            Text('Carbs', style: TextStyle(color: Theme.of(context).primaryColor),),
+                          ]
+                        ),
+                      ),
+                      CircularPercentIndicator(
+                        0.6,
+                        shouldAnimate: true,
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                        fgColor: Colors.blue.shade700,
+                        bgColor: Theme.of(context).colorScheme.secondary,
+                        center: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('60%', style: TextStyle(color: Colors.blue.shade700),),
+                            Text('Proteins', style: TextStyle(color: Colors.blue.shade700),),
+                          ]
+                        ),
+                      ),
+                      CircularPercentIndicator(
+                        0.3,
+                        shouldAnimate: true,
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                        fgColor: Colors.green.shade800,
+                        bgColor: Theme.of(context).colorScheme.secondary,
+                        center: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('30%', style: TextStyle(color: Colors.green.shade800),),
+                            Text('Fats', style: TextStyle(color: Colors.green.shade800),),
+                          ]
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
 
+    );
+  }
+}
+
+class DefaultBox extends StatelessWidget {
+  const DefaultBox({
+    this.width,
+    this.height,
+    this.shadows,
+    this.child,
+    super.key,
+  });
+  final Widget? child;
+  final List<BoxShadow>? shadows;
+  final double? width;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width ?? MediaQuery.of(context).size.width,
+      height: height,
+      margin: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: shadows ?? const [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 15,
+            spreadRadius: 1,
+            offset: Offset(3, 3)
+          ),
+          BoxShadow(
+            color: Color(0xFF191919),
+            blurRadius: 15,
+            spreadRadius: 1,
+            offset: Offset(-3, -3)
+          ),
+        ],
+      ),
+      child: child
     );
   }
 }

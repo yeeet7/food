@@ -30,7 +30,7 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator> {
           return CustomPaint(
             isComplex: false,
             foregroundPainter: _CircularPercentIndicatorPainter(
-              Tween(begin: 0.0, end: widget.value).animate(widget.animationController!).value,
+              Tween(begin: 0.0, end: widget.value).animate(CurvedAnimation(parent: widget.animationController!, curve: Curves.easeInOut)).value,
               widget.radius,
               widget.strokeWidth,
               bgColor: widget.bgColor,

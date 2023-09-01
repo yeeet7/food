@@ -113,7 +113,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           LinearPercentIndicator(
                             0.7,
                             MediaQuery.of(context).size.width - 84,
-                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forward(),
                             fgColor: Colors.orange,
                             inside: const Text('70%'),
                           ),
@@ -128,7 +128,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       CircularPercentIndicator(
                         0.9,
                         shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..ForwardAfter(100),
                         fgColor: Theme.of(context).primaryColor,
                         bgColor: Theme.of(context).colorScheme.secondary,
                         center: Column(
@@ -142,7 +142,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       CircularPercentIndicator(
                         0.6,
                         shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..ForwardAfter(200),
                         fgColor: Colors.blue.shade700,
                         bgColor: Theme.of(context).colorScheme.secondary,
                         center: Column(
@@ -156,7 +156,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       CircularPercentIndicator(
                         0.3,
                         shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..forward(),
+                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..ForwardAfter(300),
                         fgColor: Colors.green.shade800,
                         bgColor: Theme.of(context).colorScheme.secondary,
                         center: Column(
@@ -221,4 +221,8 @@ class DefaultBox extends StatelessWidget {
       child: child
     );
   }
+}
+
+extension on AnimationController {
+  Future<void> ForwardAfter(int milliseconds) async => await Future.delayed(Duration(milliseconds: milliseconds), () => forward());
 }

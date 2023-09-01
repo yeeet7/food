@@ -29,7 +29,7 @@ class LinearPercentIndicator extends StatelessWidget {
           animation: animationController!,
           builder: (context, child) {
             return Container(
-              width: Tween(begin: 0.0, end: width*value).animate(animationController!).value,
+              width: Tween(begin: 0.0, end: width*value).animate(CurvedAnimation(parent: animationController!, curve: Curves.easeInOut)).value,
               height: height ?? 14,
               decoration: BoxDecoration(
                 color: fgColor ?? Theme.of(context).primaryColor,

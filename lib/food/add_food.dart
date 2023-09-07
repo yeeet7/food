@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:food/food/food.dart';
 import 'package:food/food/new_food.dart';
 
 class AddFood extends StatelessWidget {
@@ -51,10 +52,14 @@ class AddFood extends StatelessWidget {
           ],
         ),
     
-        body: const SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              IconButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(true))),
+                icon: const Icon(Icons.add)
+              )
               //TODO: show foods
               //TODO: filter by ssearch
             ],

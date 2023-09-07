@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFF171717),
           primary: Color(0xFF101010),
         ),
-        primaryColor: const Color(0xFF6B0000),
+        primaryColor: const Color(0xFF8B0000),
         useMaterial3: true
       ),
       home: StreamBuilder(

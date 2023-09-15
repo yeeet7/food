@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:food/food/food.dart';
-import 'package:food/food/new_food.dart';
 
 class AddFood extends StatelessWidget {
   const AddFood({super.key});
@@ -47,7 +46,7 @@ class AddFood extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NewFood())),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.create))),
             )
           ],
         ),
@@ -57,11 +56,19 @@ class AddFood extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(true))),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.add))),
                 icon: const Icon(Icons.add)
-              )
+              ),
+              IconButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.view))),
+                icon: const Icon(Icons.remove_red_eye)
+              ),
+              IconButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.edit))),
+                icon: const Icon(Icons.edit)
+              ),
               //TODO: show foods
-              //TODO: filter by ssearch
+              //TODO: filter by search
             ],
           ),
         )

@@ -1,25 +1,29 @@
 
-import 'dart:math';
+import 'dart:math' as math;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food/widgets/food_tile.dart';
 
-class Food extends StatefulWidget {
-  const Food(this.intent, {super.key});
+class FoodWidget extends StatefulWidget {
+  const FoodWidget(this.intent, {this.food, super.key});
   final FoodIntent intent;
+  final Food? food;
 
   @override
-  State<Food> createState() => _FoodState();
+  State<FoodWidget> createState() => _FoodWidgetState();
 }
 
-class _FoodState extends State<Food> {
+class _FoodWidgetState extends State<FoodWidget> {
 
-  Unit unit = Unit.gram;
-  final multiplierCtrl = TextEditingController.fromValue(const TextEditingValue(text: '1'));
-  final nameCtrl = TextEditingController();
-  final kcalCtrl = TextEditingController.fromValue(const TextEditingValue(text: '1'));
-  final carbsCtrl = TextEditingController.fromValue(const TextEditingValue(text: '1'));
-  final proteinsCtrl = TextEditingController.fromValue(const TextEditingValue(text: '1'));
-  final fatsCtrl = TextEditingController.fromValue(const TextEditingValue(text: '1'));
+  late Unit unit;
+  late final TextEditingController multiplierCtrl;
+  late final TextEditingController nameCtrl;
+  late final TextEditingController kcalCtrl;
+  late final TextEditingController carbsCtrl;
+  late final TextEditingController proteinsCtrl;
+  late final TextEditingController fatsCtrl;
 
   final multiplierNode = FocusNode();
   final nameNode = FocusNode();
@@ -27,6 +31,18 @@ class _FoodState extends State<Food> {
   final carbsNode = FocusNode();
   final proteinsNode = FocusNode();
   final fatsNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    unit = widget.food?.unit ?? Unit.gram;
+    multiplierCtrl = TextEditingController.fromValue(TextEditingValue(text: '${widget.food?.amount ?? 1}'));
+    nameCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.food?.name ?? 'name'));
+    kcalCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
+    carbsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
+    proteinsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
+    fatsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +89,7 @@ class _FoodState extends State<Food> {
                           width: MediaQuery.of(context).size.width * .2,
                           child: Column(
                             children: [
-                              Text(index == 0 ? '30' : index == 1 ? '30g' : index == 2 ? '30g' : '30g', style: TextStyle(color: index == 0 ? Colors.orange : index == 1 ? Theme.of(context).primaryColor : index == 2 ? Colors.blue.shade700 : Colors.green.shade800, fontWeight: FontWeight.bold, fontSize: 18),),
+                              Text(index == 0 ? '${widget.food?.kcal ?? '0'}' : index == 1 ? '${widget.food?.carbs ?? 0}g' : index == 2 ? '${widget.food?.proteins ?? 0}g' : '${widget.food?.fats ?? 0}g', style: TextStyle(color: index == 0 ? Colors.orange : index == 1 ? Theme.of(context).primaryColor : index == 2 ? Colors.blue.shade700 : Colors.green.shade800, fontWeight: FontWeight.bold, fontSize: 18),),
                               Text(index == 0 ? 'Calories' : index == 1 ? 'Carbs' : index == 2 ? 'Proteins' : 'Fats', style: const TextStyle(color: Colors.white30, fontWeight: FontWeight.bold),)
                             ],
                           ),
@@ -111,7 +127,6 @@ class _FoodState extends State<Food> {
                       controller: nameCtrl,
                       focusNode: nameNode,
                       cursorColor: Colors.white70,
-                      keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         filled: true,
@@ -153,10 +168,10 @@ class _FoodState extends State<Food> {
                 ],
               ),
 
-              if (!{FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) const FittedBox(
+              if (!{FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) FittedBox(
                 child: Text(
-                  'Name',
-                  style: TextStyle(
+                  widget.food?.name ?? "name",
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: Colors.white70
@@ -222,7 +237,7 @@ class _FoodState extends State<Food> {
                       alignment: Alignment.center,
                       borderRadius: BorderRadius.circular(12),
                       dropdownColor: Theme.of(context).colorScheme.secondary,
-                      icon: Transform.rotate(angle: pi*-.5, child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16,)),
+                      icon: Transform.rotate(angle: math.pi*-.5, child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16,)),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Theme.of(context).colorScheme.secondary,
@@ -309,7 +324,28 @@ class _FoodState extends State<Food> {
         icon: Icon(Icons.add, color: Theme.of(context).primaryColor,),
         label: Text(widget.intent == FoodIntent.add ? 'add' : widget.intent == FoodIntent.edit ? 'save' : 'create', style: TextStyle(color: Theme.of(context).primaryColor),),
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        onPressed: () {}
+        onPressed: () {
+          switch(widget.intent) {
+            case FoodIntent.create:
+              FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(DateTime.now().toString()).set({
+                'name': nameCtrl.text,
+                'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
+                'unit': unit.index,
+                'calories': int.parse(kcalCtrl.text),
+                'carbs': int.parse(carbsCtrl.text),
+                'proteins': int.parse(proteinsCtrl.text),
+                'fats': int.parse(fatsCtrl.text),
+              });
+              Navigator.pop(context);
+              break;
+            case FoodIntent.add:
+              break;
+            case FoodIntent.edit:
+              break;
+            case FoodIntent.view:
+              break;
+          }
+        }
       ) : null,
 
     );

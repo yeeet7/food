@@ -1,10 +1,20 @@
 
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food/food/food.dart';
+import 'package:food/widgets/food_tile.dart';
 
-class AddFood extends StatelessWidget {
+class AddFood extends StatefulWidget {
   const AddFood({super.key});
 
+  @override
+  State<AddFood> createState() => _AddFoodState();
+}
+
+class _AddFoodState extends State<AddFood> {
   @override
   Widget build(BuildContext context) {
 
@@ -46,31 +56,41 @@ class AddFood extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.create))),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodWidget(FoodIntent.create))),
             )
           ],
         ),
     
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.add))),
-                icon: const Icon(Icons.add)
+        body: FutureBuilder(
+          future: FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get(),
+          builder: (context, snapshot) {
+            log(snapshot.data?.docs.map((e) => e.data()).toString() ?? '');
+            // List<Food> foods = snapshot.data?.docs.map((e) => Food());
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: snapshot.data?.docs.map<Widget>(
+                  (e) => FoodTile(
+                    Food(
+                      id: e.id,
+                      name: e.data()['name'] ?? 'name',
+                      amount: e.data()['amount'] ?? 1,
+                      unit: Unit.values.elementAt(e.data()['unit']),
+                      kcal: e.data()['calories'] ?? 0,
+                      carbs: e.data()['carbs'] ?? 0,
+                      proteins: e.data()['proteins'] ?? 0,
+                      fats: e.data()['fats'] ?? 0
+                    ),
+                    onDelete: () async {
+                      await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(e.id).delete();
+                      setState(() {});
+                    },
+                  )
+                ).toList() ?? [],
+                //TODO: filter by search
               ),
-              IconButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.view))),
-                icon: const Icon(Icons.remove_red_eye)
-              ),
-              IconButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Food(FoodIntent.edit))),
-                icon: const Icon(Icons.edit)
-              ),
-              //TODO: show foods
-              //TODO: filter by search
-            ],
-          ),
+            );
+          }
         )
     
       ),

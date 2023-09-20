@@ -65,7 +65,9 @@ class FoodTile extends StatelessWidget {
                   ),
 
                   PopupMenuButton(
-                    // icon: const Icon(Icons.more_vert_rounded),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    color: Theme.of(context).colorScheme.secondary,
+                    icon: const Icon(Icons.more_vert_rounded, color: Colors.white70,),
                     onSelected: (value) async {
                       switch(value) {
                         case 0:

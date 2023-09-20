@@ -1,12 +1,16 @@
 
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/food.dart';
 
 class FoodTile extends StatelessWidget {
-  const FoodTile(this.food, {required this.onDelete, super.key});
+  const FoodTile(this.food, {required this.setstate, super.key});
 
-  final void Function() onDelete;
+  final void Function() setstate;
   final Food food;
 
   @override
@@ -22,7 +26,7 @@ class FoodTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.add, food: food,))),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.add, setstate, food: food,))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -65,7 +69,11 @@ class FoodTile extends StatelessWidget {
                     onSelected: (value) async {
                       switch(value) {
                         case 0:
-                          onDelete.call();
+                          await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(food.id).delete();
+                          setstate.call();
+                          break;
+                        case 1:
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.edit, setstate, food: food,))).then((value) => setstate.call());
                           break;
                       }
                     },
@@ -73,6 +81,10 @@ class FoodTile extends StatelessWidget {
                       const PopupMenuItem(
                         value: 0,
                         child: Text('delete'),
+                      ),
+                      const PopupMenuItem(
+                        value: 1,
+                        child: Text('edit'),
                       ),
                     ],
                   ),

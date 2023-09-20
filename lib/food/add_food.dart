@@ -1,6 +1,4 @@
 
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +54,7 @@ class _AddFoodState extends State<AddFood> {
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FoodWidget(FoodIntent.create))),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
             )
           ],
         ),
@@ -64,8 +62,6 @@ class _AddFoodState extends State<AddFood> {
         body: FutureBuilder(
           future: FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get(),
           builder: (context, snapshot) {
-            log(snapshot.data?.docs.map((e) => e.data()).toString() ?? '');
-            // List<Food> foods = snapshot.data?.docs.map((e) => Food());
             return SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -81,10 +77,7 @@ class _AddFoodState extends State<AddFood> {
                       proteins: e.data()['proteins'] ?? 0,
                       fats: e.data()['fats'] ?? 0
                     ),
-                    onDelete: () async {
-                      await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(e.id).delete();
-                      setState(() {});
-                    },
+                    setstate: () => setState(() {}),
                   )
                 ).toList() ?? [],
                 //TODO: filter by search

@@ -7,8 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/widgets/food_tile.dart';
 
 class FoodWidget extends StatefulWidget {
-  const FoodWidget(this.intent, {this.food, super.key});
+  const FoodWidget(this.intent, this.setstate, {this.food, super.key});
   final FoodIntent intent;
+  final void Function() setstate;
   final Food? food;
 
   @override
@@ -36,12 +37,12 @@ class _FoodWidgetState extends State<FoodWidget> {
   void initState() {
     super.initState();
     unit = widget.food?.unit ?? Unit.gram;
-    multiplierCtrl = TextEditingController.fromValue(TextEditingValue(text: '${widget.food?.amount ?? 1}'));
+    multiplierCtrl = TextEditingController.fromValue(TextEditingValue(text: '${widget.food?.amount ?? 1}${widget.food?.unit == Unit.portion ? 'x' : ''}'));
     nameCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.food?.name ?? 'name'));
     kcalCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
-    carbsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
-    proteinsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
-    fatsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
+    carbsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.carbs ?? '1').toString()));
+    proteinsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.proteins ?? '1').toString()));
+    fatsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.fats ?? '1').toString()));
   }
 
   @override
@@ -336,13 +337,27 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'proteins': int.parse(proteinsCtrl.text),
                 'fats': int.parse(fatsCtrl.text),
               });
+              widget.setstate.call();
+              Navigator.pop(context);
+              break;
+            case FoodIntent.edit:
+              FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(widget.food?.id).set({
+                'name': nameCtrl.text,
+                'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
+                'unit': unit.index,
+                'calories': int.parse(kcalCtrl.text),
+                'carbs': int.parse(carbsCtrl.text),
+                'proteins': int.parse(proteinsCtrl.text),
+                'fats': int.parse(fatsCtrl.text),
+              }, SetOptions(merge: true));
+              widget.setstate.call();
               Navigator.pop(context);
               break;
             case FoodIntent.add:
-              break;
-            case FoodIntent.edit:
+              widget.setstate.call();
               break;
             case FoodIntent.view:
+              widget.setstate.call();
               break;
           }
         }

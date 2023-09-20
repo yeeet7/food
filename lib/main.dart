@@ -1,11 +1,14 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/add_food.dart';
+import 'package:food/food/food.dart';
 import 'package:food/widgets/circular_percent_indicator.dart';
+import 'package:food/widgets/food_tile.dart';
 import 'package:food/widgets/linear_percent_indicator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:food/profile.dart';
@@ -97,86 +100,104 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         ],
       ),
 
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DefaultBox(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: FutureBuilder(
+        future: FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').get(),
+        builder: (context, snapshot) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                DefaultBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(FontAwesomeIcons.fireFlameCurved),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Calories: ${(2600*0.7).round()} kcal  /  2600 kcal'),
-                          LinearPercentIndicator(
-                            0.7,
-                            MediaQuery.of(context).size.width - 84,
-                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forward(),
-                            fgColor: Colors.orange,
-                            inside: const Text('70%'),
+                          const Icon(FontAwesomeIcons.fireFlameCurved),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Calories: ${(2600*0.7).round()} kcal  /  2600 kcal'),
+                              LinearPercentIndicator(
+                                0.7,
+                                MediaQuery.of(context).size.width - 84,
+                                animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forward(),
+                                fgColor: Colors.orange,
+                                bgColor: Theme.of(context).colorScheme.primary,
+                                inside: const Text('70%'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CircularPercentIndicator(
+                            0.9,
+                            shouldAnimate: true,
+                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(100),
+                            fgColor: Theme.of(context).primaryColor,
+                            bgColor: Theme.of(context).colorScheme.primary,
+                            center: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('90%', style: TextStyle(color: Theme.of(context).primaryColor),),
+                                Text('Carbs', style: TextStyle(color: Theme.of(context).primaryColor),),
+                              ]
+                            ),
+                          ),
+                          CircularPercentIndicator(
+                            0.6,
+                            shouldAnimate: true,
+                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(200),
+                            fgColor: Colors.blue.shade700,
+                            bgColor: Theme.of(context).colorScheme.primary,
+                            center: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('60%', style: TextStyle(color: Colors.blue.shade700),),
+                                Text('Proteins', style: TextStyle(color: Colors.blue.shade700),),
+                              ]
+                            ),
+                          ),
+                          CircularPercentIndicator(
+                            0.3,
+                            shouldAnimate: true,
+                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(300),
+                            fgColor: Colors.green.shade800,
+                            bgColor: Theme.of(context).colorScheme.primary,
+                            center: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('30%', style: TextStyle(color: Colors.green.shade800),),
+                                Text('Fats', style: TextStyle(color: Colors.green.shade800),),
+                              ]
+                            ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CircularPercentIndicator(
-                        0.9,
-                        shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(100),
-                        fgColor: Theme.of(context).primaryColor,
-                        bgColor: Theme.of(context).colorScheme.secondary,
-                        center: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('90%', style: TextStyle(color: Theme.of(context).primaryColor),),
-                            Text('Carbs', style: TextStyle(color: Theme.of(context).primaryColor),),
-                          ]
-                        ),
-                      ),
-                      CircularPercentIndicator(
-                        0.6,
-                        shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(200),
-                        fgColor: Colors.blue.shade700,
-                        bgColor: Theme.of(context).colorScheme.secondary,
-                        center: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('60%', style: TextStyle(color: Colors.blue.shade700),),
-                            Text('Proteins', style: TextStyle(color: Colors.blue.shade700),),
-                          ]
-                        ),
-                      ),
-                      CircularPercentIndicator(
-                        0.3,
-                        shouldAnimate: true,
-                        animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(300),
-                        fgColor: Colors.green.shade800,
-                        bgColor: Theme.of(context).colorScheme.secondary,
-                        center: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('30%', style: TextStyle(color: Colors.green.shade800),),
-                            Text('Fats', style: TextStyle(color: Colors.green.shade800),),
-                          ]
-                        ),
-                      ),
-                    ],
+                ),
+                
+                if(snapshot.data?.data()?.entries != null) ...snapshot.data!.data()!.entries.map((entry) => Food.fromEntry(FoodEntry(entry.value['id'], entry.value['amount']))).map(
+                  (e) => FutureBuilder(
+                    future: e,
+                    builder: (context, snap) {
+                      if(snap.data != null) {
+                        return FoodTile(snap.data!, intent: FoodIntent.view, setstate: ()=>setState(() {}));
+                      } else {return const SizedBox();}
+                    }
                   ),
-                ],
-              ),
+                ).toList()
+
+              ],
             ),
-          ],
-        ),
+          );
+        }
       ),
 
       floatingActionButton: FloatingActionButton(
@@ -211,7 +232,7 @@ class DefaultBox extends StatelessWidget {
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
         boxShadow: shadows ?? const [
           BoxShadow(

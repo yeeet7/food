@@ -354,7 +354,14 @@ class _FoodWidgetState extends State<FoodWidget> {
               Navigator.pop(context);
               break;
             case FoodIntent.add:
+              FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').set({
+                DateTime.now().toString(): {
+                  'id': widget.food?.id,
+                  'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
+                }
+              }, SetOptions(merge: true));
               widget.setstate.call();
+              Navigator.pop(context);
               break;
             case FoodIntent.view:
               widget.setstate.call();

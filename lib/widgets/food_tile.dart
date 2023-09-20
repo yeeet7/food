@@ -8,9 +8,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/food.dart';
 
 class FoodTile extends StatelessWidget {
-  const FoodTile(this.food, {required this.setstate, super.key});
+  const FoodTile(this.food, {this.intent = FoodIntent.add, required this.setstate, super.key});
 
   final void Function() setstate;
+  final FoodIntent intent;
   final Food food;
 
   @override
@@ -26,7 +27,7 @@ class FoodTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.add, setstate, food: food,))),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(intent, setstate, food: food,))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -114,6 +115,21 @@ class Food {
     required this.fats,
   });
 
+  static Future<Food> fromEntry(FoodEntry entry) async {
+    QuerySnapshot<Map<String, dynamic>> all = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get();
+    QueryDocumentSnapshot<Map<String, dynamic>> food = all.docs.where((e) => e.id == entry.id).first;
+    return Food(
+      id: entry.id,
+      name: food.data()['name'],
+      amount: entry.amount,
+      unit: Unit.values.elementAt(food.data()['unit']),
+      kcal: food.data()['calories'],
+      carbs: food.data()['carbs'],
+      proteins: food.data()['proteins'],
+      fats: food.data()['fats'],
+    );
+  }
+
   final String id;
   final String name;
   final Unit unit;
@@ -122,5 +138,14 @@ class Food {
   final int carbs;
   final int proteins;
   final int fats;
+
+}
+
+class FoodEntry {
+
+  const FoodEntry(this.id, this.amount);
+
+  final int amount;
+  final String id;
 
 }

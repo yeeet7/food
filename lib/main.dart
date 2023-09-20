@@ -188,7 +188,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                     future: e,
                     builder: (context, snap) {
                       if(snap.data != null) {
-                        return FoodTile(snap.data!, intent: FoodIntent.view, setstate: ()=>setState(() {}));
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                          child: FoodTile(snap.data!, intent: FoodIntent.view, setstate: ()=>setState(() {}))
+                        );
                       } else {return const SizedBox();}
                     }
                   ),

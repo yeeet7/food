@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/add_food.dart';
 import 'package:food/food/food.dart';
+import 'package:food/start/intro.dart';
 import 'package:food/widgets/circular_percent_indicator.dart';
 import 'package:food/widgets/food_tile.dart';
 import 'package:food/widgets/linear_percent_indicator.dart';
@@ -56,7 +57,16 @@ class MyApp extends StatelessWidget {
           if(snapshot.data == null) {
             return const Login();
           } else {
-            return const App();
+            return StreamBuilder(
+              stream: FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
+              builder: (context, snap) {
+                if(snap.data?.data()?['calories'] != null) {
+                  return const App();
+                } else {
+                  return const Intro();
+                }
+              }
+            );
           }
         },
       )

@@ -362,6 +362,7 @@ class _FoodWidgetState extends State<FoodWidget> {
               }, SetOptions(merge: true));
               widget.setstate.call();
               Navigator.pop(context);
+              Navigator.pop(context);
               break;
             case FoodIntent.view:
               widget.setstate.call();

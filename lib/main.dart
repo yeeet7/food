@@ -207,7 +207,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         heroTag: 'FAB',
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFood())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AddFood(()=>setState(() {})))),
       ),
 
     );

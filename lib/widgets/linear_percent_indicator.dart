@@ -18,6 +18,7 @@ class LinearPercentIndicator extends StatelessWidget {
     late Widget returnWidget;
     if(animate) {
       returnWidget = Container(
+        clipBehavior: Clip.hardEdge,
         width: width,
         height: height ?? 14,
         decoration: BoxDecoration(

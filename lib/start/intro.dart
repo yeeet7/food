@@ -96,10 +96,10 @@ class _IntroState extends State<Intro> {
         onPressed: () async {
           if(kcalCtrl.text.isEmpty || carbsCtrl.text.isEmpty || proteinsCtrl.text.isEmpty || fatsCtrl.text.isEmpty) return;
           FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).set({
-            'calories': kcalCtrl.text,
-            'carbs': carbsCtrl.text,
-            'poteins': proteinsCtrl.text,
-            'fats': fatsCtrl.text,
+            'calories': int.parse(kcalCtrl.text),
+            'carbs': int.parse(carbsCtrl.text),
+            'proteins': int.parse(proteinsCtrl.text),
+            'fats': int.parse(fatsCtrl.text),
           });
         },
       ),

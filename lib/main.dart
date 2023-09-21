@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
             return StreamBuilder(
               stream: FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
               builder: (context, snap) {
-                if(snap.data?.data()?['calories'] != null) {
+                if(snap.data == null || snap.data?.data()?['calories'] != null) {
                   return const App();
                 } else {
                   return const Intro();
@@ -110,8 +110,20 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         ],
       ),
 
-      body: FutureBuilder(
-        future: FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').get(),
+      body: FutureBuilder<MainPageInfo>(
+        future: () async {
+          DocumentSnapshot<Map> foods = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').get();
+          List<Food> awaitedFoods = [];
+          for (int food = 0; food < foods.data()!.entries.length; food++) {
+            var currentFood = foods.data()?.entries.toList()[food];
+            awaitedFoods.add(
+              await Food.fromEntry(
+                FoodEntry(currentFood?.value['id'], currentFood?.value['amount'])
+              )
+            );
+          }
+          return MainPageInfo(awaitedFoods, await UserAmounts.get());
+        }.call(),
         builder: (context, snapshot) {
           return SingleChildScrollView(
             child: Column(
@@ -128,14 +140,14 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Calories: ${(2600*0.7).round()} kcal  /  2600 kcal'),
+                              Text('Calories: ${(snapshot.data?.kcal ?? 0).round()} kcal  /  ${snapshot.data?.userInfo.kcal} kcal'),
                               LinearPercentIndicator(
-                                0.7,
+                                ((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0)).clamp(0, 1),
                                 MediaQuery.of(context).size.width - 84,
                                 animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forward(),
                                 fgColor: Colors.orange,
                                 bgColor: Theme.of(context).colorScheme.primary,
-                                inside: const Text('70%'),
+                                inside: Text('${((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0) * 100).clamp(0, 100).round()}%'),
                               ),
                             ],
                           ),
@@ -145,47 +157,65 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CircularPercentIndicator(
-                            0.9,
-                            shouldAnimate: true,
-                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(100),
-                            fgColor: Theme.of(context).primaryColor,
-                            bgColor: Theme.of(context).colorScheme.primary,
-                            center: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('90%', style: TextStyle(color: Theme.of(context).primaryColor),),
-                                Text('Carbs', style: TextStyle(color: Theme.of(context).primaryColor),),
-                              ]
-                            ),
+                          Column(
+                            children: [
+                              CircularPercentIndicator(
+                                ((snapshot.data?.carbs ?? 0) / (snapshot.data?.userInfo.carbs ?? 0)).clamp(0, 1),
+                                shouldAnimate: true,
+                                animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(100),
+                                fgColor: Theme.of(context).primaryColor,
+                                bgColor: Theme.of(context).colorScheme.primary,
+                                center: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('${((snapshot.data?.carbs ?? 0) / (snapshot.data?.userInfo.carbs ?? 0) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Theme.of(context).primaryColor),),
+                                    Text('Carbs', style: TextStyle(color: Theme.of(context).primaryColor),),
+                                  ]
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text('${((snapshot.data?.userInfo.carbs ?? 0) - (snapshot.data?.carbs ?? 0)).clamp(0, double.infinity)}g left', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),)
+                            ],
                           ),
-                          CircularPercentIndicator(
-                            0.6,
-                            shouldAnimate: true,
-                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(200),
-                            fgColor: Colors.blue.shade700,
-                            bgColor: Theme.of(context).colorScheme.primary,
-                            center: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('60%', style: TextStyle(color: Colors.blue.shade700),),
-                                Text('Proteins', style: TextStyle(color: Colors.blue.shade700),),
-                              ]
-                            ),
+                          Column(
+                            children: [
+                              CircularPercentIndicator(
+                                ((snapshot.data?.proteins ?? 0) / (snapshot.data?.userInfo.proteins ?? 0)).clamp(0, 1),
+                                shouldAnimate: true,
+                                animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(200),
+                                fgColor: Colors.blue.shade700,
+                                bgColor: Theme.of(context).colorScheme.primary,
+                                center: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('${((snapshot.data?.proteins ?? 0) / (snapshot.data?.userInfo.proteins ?? 0) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Colors.blue.shade700),),
+                                    Text('Proteins', style: TextStyle(color: Colors.blue.shade700),),
+                                  ]
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text('${((snapshot.data?.userInfo.proteins ?? 0) - (snapshot.data?.proteins ?? 0)).clamp(0, double.infinity)}g left', style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.bold),)
+                            ],
                           ),
-                          CircularPercentIndicator(
-                            0.3,
-                            shouldAnimate: true,
-                            animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(300),
-                            fgColor: Colors.green.shade800,
-                            bgColor: Theme.of(context).colorScheme.primary,
-                            center: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('30%', style: TextStyle(color: Colors.green.shade800),),
-                                Text('Fats', style: TextStyle(color: Colors.green.shade800),),
-                              ]
-                            ),
+                          Column(
+                            children: [
+                              CircularPercentIndicator(
+                                ((snapshot.data?.fats ?? 0) / (snapshot.data?.userInfo.fats ?? 0)).clamp(0, 1),
+                                shouldAnimate: true,
+                                animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(300),
+                                fgColor: Colors.green.shade800,
+                                bgColor: Theme.of(context).colorScheme.primary,
+                                center: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('${((snapshot.data?.fats ?? 0) / (snapshot.data?.userInfo.fats ?? 0) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Colors.green.shade800),),
+                                    Text('Fats', style: TextStyle(color: Colors.green.shade800),),
+                                  ]
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Text('${((snapshot.data?.userInfo.fats ?? 0) - (snapshot.data?.fats ?? 0)).clamp(0, double.infinity)}g left', style: TextStyle(color: Colors.green.shade800, fontWeight: FontWeight.bold),)
+                            ],
                           ),
                         ],
                       ),
@@ -193,18 +223,11 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                   ),
                 ),
                 
-                if(snapshot.data?.data()?.entries != null) ...snapshot.data!.data()!.entries.map((entry) => Food.fromEntry(FoodEntry(entry.value['id'], entry.value['amount']))).map(
-                  (e) => FutureBuilder(
-                    future: e,
-                    builder: (context, snap) {
-                      if(snap.data != null) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
-                          child: FoodTile(snap.data!, intent: FoodIntent.view, setstate: ()=>setState(() {}))
-                        );
-                      } else {return const SizedBox();}
-                    }
-                  ),
+                if(snapshot.data != null) ...snapshot.data!.foods.map(
+                  (e) =>  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    child: FoodTile(e, intent: FoodIntent.view, setstate: ()=>setState(() {}))
+                  )
                 ).toList()
 
               ],
@@ -269,4 +292,68 @@ class DefaultBox extends StatelessWidget {
 
 extension on AnimationController {
   Future<void> forwardAfter(int milliseconds) async => await Future.delayed(Duration(milliseconds: milliseconds), () => forward());
+}
+
+class MainPageInfo {
+
+  MainPageInfo(this.foods, this.userInfo);
+
+  final List<Food> foods;
+  final UserAmounts userInfo;
+
+  int get kcal {
+    int total = 0;
+    for (var food in foods) {
+      total = total + food.kcal;
+    }
+    return total;
+  }
+  int get carbs {
+    int total = 0;
+    for (var food in foods) {
+      total = total + food.carbs;
+    }
+    return total;
+  }
+  int get proteins {
+    int total = 0;
+    for (var food in foods) {
+      total = total + food.proteins;
+    }
+    return total;
+  }
+  int get fats {
+    int total = 0;
+    for (var food in foods) {
+      total = total + food.fats;
+    }
+    return total;
+  }
+
+}
+
+class UserAmounts {
+
+  UserAmounts._(this.kcal, this.carbs, this.proteins, this.fats);
+
+  static Future<UserAmounts> get() async {
+    DocumentSnapshot<Map> doc = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).get();
+    return UserAmounts._(
+      doc.data()?['calories'] ?? 0,
+      doc.data()?['carbs'] ?? 0,
+      doc.data()?['proteins'] ?? 0,
+      doc.data()?['fats'] ?? 0,
+    );
+  }
+
+  final int kcal;
+  final int carbs;
+  final int proteins;
+  final int fats;
+
+  @override
+  String toString() {
+    return 'UserAmounts($kcal, $carbs, $proteins, $fats)';
+  }
+
 }

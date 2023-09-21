@@ -139,6 +139,11 @@ class Food {
   final int proteins;
   final int fats;
 
+  @override
+  String toString() {
+    return 'Food($name)';
+  }
+
 }
 
 class FoodEntry {

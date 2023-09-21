@@ -113,14 +113,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       body: FutureBuilder<MainPageInfo>(
         future: () async {
           DocumentSnapshot<Map> foods = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').get();
-          List<Food> awaitedFoods = [];
+          List<FoodEntry> awaitedFoods = [];
           for (int food = 0; food < foods.data()!.entries.length; food++) {
             var currentFood = foods.data()?.entries.toList()[food];
-            awaitedFoods.add(
-              await Food.fromEntry(
-                FoodEntry(currentFood?.value['id'], currentFood?.value['amount'])
-              )
-            );
+            awaitedFoods.add(await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount']));
           }
           return MainPageInfo(awaitedFoods, await UserAmounts.get());
         }.call(),
@@ -298,34 +294,34 @@ class MainPageInfo {
 
   MainPageInfo(this.foods, this.userInfo);
 
-  final List<Food> foods;
+  final List<FoodEntry> foods;
   final UserAmounts userInfo;
 
   int get kcal {
     int total = 0;
     for (var food in foods) {
-      total = total + food.kcal;
+      total = total + food.calculateKcal;
     }
     return total;
   }
   int get carbs {
     int total = 0;
     for (var food in foods) {
-      total = total + food.carbs;
+      total = total + food.calculateCarbs;
     }
     return total;
   }
   int get proteins {
     int total = 0;
     for (var food in foods) {
-      total = total + food.proteins;
+      total = total + food.calculateProteins;
     }
     return total;
   }
   int get fats {
     int total = 0;
     for (var food in foods) {
-      total = total + food.fats;
+      total = total + food.calculateFats;
     }
     return total;
   }

@@ -115,21 +115,6 @@ class Food {
     required this.fats,
   });
 
-  static Future<Food> fromEntry(FoodEntry entry) async {
-    QuerySnapshot<Map<String, dynamic>> all = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get();
-    QueryDocumentSnapshot<Map<String, dynamic>> food = all.docs.where((e) => e.id == entry.id).first;
-    return Food(
-      id: entry.id,
-      name: food.data()['name'],
-      amount: entry.amount,
-      unit: Unit.values.elementAt(food.data()['unit']),
-      kcal: food.data()['calories'],
-      carbs: food.data()['carbs'],
-      proteins: food.data()['proteins'],
-      fats: food.data()['fats'],
-    );
-  }
-
   final String id;
   final String name;
   final Unit unit;
@@ -146,11 +131,41 @@ class Food {
 
 }
 
-class FoodEntry {
+class FoodEntry extends Food {
 
-  const FoodEntry(this.id, this.amount);
+  FoodEntry._({
+    required this.diaryAmount,
+    required super.name,
+    required super.unit,
+    required super.amount,
+    required super.id,
+    required super.kcal,
+    required super.carbs,
+    required super.proteins,
+    required super.fats,
+  });
 
-  final int amount;
-  final String id;
+  final int diaryAmount;
+
+  int get calculateKcal => (kcal/amount*diaryAmount).round();
+  int get calculateCarbs => (carbs/amount*diaryAmount).round();
+  int get calculateProteins => (proteins/amount*diaryAmount).round();
+  int get calculateFats => (fats/amount*diaryAmount).round();
+
+  static Future<FoodEntry> fromDiary(String id, int amount) async {
+    QuerySnapshot<Map<String, dynamic>> all = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get();
+    QueryDocumentSnapshot<Map<String, dynamic>> food = all.docs.where((e) => e.id == id).first;
+    return FoodEntry._(
+      id: id,
+      diaryAmount: amount,
+      name: food.data()['name'],
+      amount: food.data()['amount'],
+      unit: Unit.values.elementAt(food.data()['unit']),
+      kcal: food.data()['calories'],
+      carbs: food.data()['carbs'],
+      proteins: food.data()['proteins'],
+      fats: food.data()['fats'],
+    );
+  }
 
 }

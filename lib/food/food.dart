@@ -367,6 +367,9 @@ class _FoodWidgetState extends State<FoodWidget> {
             case FoodIntent.view:
               widget.setstate.call();
               break;
+            case FoodIntent.editInDiary:
+              widget.setstate.call();
+              break;
           }
         }
       ) : null,
@@ -385,4 +388,5 @@ enum FoodIntent {
   add,
   create,
   edit,
+  editInDiary,
 }

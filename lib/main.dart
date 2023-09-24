@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/add_food.dart';
-import 'package:food/food/food.dart';
 import 'package:food/start/intro.dart';
 import 'package:food/widgets/circular_percent_indicator.dart';
 import 'package:food/widgets/food_tile.dart';
@@ -116,7 +115,8 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           List<FoodEntry> awaitedFoods = [];
           for (int food = 0; food < (foods.data()?.entries.length ?? 0); food++) {
             var currentFood = foods.data()?.entries.toList()[food];
-            awaitedFoods.add(await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount']));
+            FoodEntry foodEntry = await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount'], currentFood?.key);
+            awaitedFoods.add(foodEntry);
           }
           return MainPageInfo(awaitedFoods, await UserAmounts.get());
         }.call(),
@@ -222,7 +222,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                 if(snapshot.data != null) ...snapshot.data!.foods.map(
                   (e) =>  Container(
                     margin: const EdgeInsets.symmetric(horizontal: 6),
-                    child: FoodTile(e, intent: FoodIntent.view, setstate: ()=>setState(() {}))
+                    child: FoodEntryTile(e, () => setState(() {}))
                   )
                 ).toList()
 

@@ -79,7 +79,7 @@ class _AddFoodState extends State<AddFood> {
                       proteins: e.data()['proteins'] ?? 0,
                       fats: e.data()['fats'] ?? 0
                     ),
-                    setstate: widget.setstate,
+                    setstate: () {widget.setstate.call(); setState(() {});},
                   )
                 ).toList() ?? [],
                 //TODO: filter by search

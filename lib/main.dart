@@ -114,7 +114,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         future: () async {
           DocumentSnapshot<Map> foods = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').get();
           List<FoodEntry> awaitedFoods = [];
-          for (int food = 0; food < foods.data()!.entries.length; food++) {
+          for (int food = 0; food < (foods.data()?.entries.length ?? 0); food++) {
             var currentFood = foods.data()?.entries.toList()[food];
             awaitedFoods.add(await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount']));
           }
@@ -136,14 +136,14 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Calories: ${(snapshot.data?.kcal ?? 0).round()} kcal  /  ${snapshot.data?.userInfo.kcal} kcal'),
+                              Text('Calories: ${(snapshot.data?.kcal ?? 0).round()} kcal  /  ${snapshot.data?.userInfo.kcal ?? 0} kcal'),
                               LinearPercentIndicator(
-                                ((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0)).clamp(0, 1),
+                                ((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0)).non().clamp(0, 1).toDouble(),
                                 MediaQuery.of(context).size.width - 84,
                                 animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forward(),
                                 fgColor: Colors.orange,
                                 bgColor: Theme.of(context).colorScheme.primary,
-                                inside: Text('${((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0) * 100).clamp(0, 100).round()}%'),
+                                inside: Text('${(((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0).non()) * 100).clamp(0, 100).round()}%'),
                               ),
                             ],
                           ),
@@ -156,7 +156,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           Column(
                             children: [
                               CircularPercentIndicator(
-                                ((snapshot.data?.carbs ?? 0) / (snapshot.data?.userInfo.carbs ?? 0)).clamp(0, 1),
+                                ((snapshot.data?.carbs ?? 0) / (snapshot.data?.userInfo.carbs ?? 0)).non().clamp(0, 1).toDouble(),
                                 shouldAnimate: true,
                                 animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(100),
                                 fgColor: Theme.of(context).primaryColor,
@@ -164,7 +164,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                                 center: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('${((snapshot.data?.carbs ?? 0) / (snapshot.data?.userInfo.carbs ?? 0) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Theme.of(context).primaryColor),),
+                                    Text('${((((snapshot.data?.carbs ?? 0) / (snapshot.data?.userInfo.carbs ?? 0)).non()) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Theme.of(context).primaryColor),),
                                     Text('Carbs', style: TextStyle(color: Theme.of(context).primaryColor),),
                                   ]
                                 ),
@@ -176,7 +176,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           Column(
                             children: [
                               CircularPercentIndicator(
-                                ((snapshot.data?.proteins ?? 0) / (snapshot.data?.userInfo.proteins ?? 0)).clamp(0, 1),
+                                ((snapshot.data?.proteins ?? 0) / (snapshot.data?.userInfo.proteins ?? 0)).non().clamp(0, 1).toDouble(),
                                 shouldAnimate: true,
                                 animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(200),
                                 fgColor: Colors.blue.shade700,
@@ -184,7 +184,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                                 center: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('${((snapshot.data?.proteins ?? 0) / (snapshot.data?.userInfo.proteins ?? 0) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Colors.blue.shade700),),
+                                    Text('${((((snapshot.data?.proteins ?? 0) / (snapshot.data?.userInfo.proteins ?? 0)).non()) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Colors.blue.shade700),),
                                     Text('Proteins', style: TextStyle(color: Colors.blue.shade700),),
                                   ]
                                 ),
@@ -196,7 +196,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                           Column(
                             children: [
                               CircularPercentIndicator(
-                                ((snapshot.data?.fats ?? 0) / (snapshot.data?.userInfo.fats ?? 0)).clamp(0, 1),
+                                ((snapshot.data?.fats ?? 0) / (snapshot.data?.userInfo.fats ?? 0)).non().clamp(0, 1).toDouble(),
                                 shouldAnimate: true,
                                 animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forwardAfter(300),
                                 fgColor: Colors.green.shade800,
@@ -204,7 +204,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                                 center: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('${((snapshot.data?.fats ?? 0) / (snapshot.data?.userInfo.fats ?? 0) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Colors.green.shade800),),
+                                    Text('${((((snapshot.data?.fats ?? 0) / (snapshot.data?.userInfo.fats ?? 0)).non()) * 100).clamp(0, 100).round()}%', style: TextStyle(color: Colors.green.shade800),),
                                     Text('Fats', style: TextStyle(color: Colors.green.shade800),),
                                   ]
                                 ),
@@ -350,6 +350,18 @@ class UserAmounts {
   @override
   String toString() {
     return 'UserAmounts($kcal, $carbs, $proteins, $fats)';
+  }
+
+}
+
+extension on num {
+
+  num non() {
+    if(isNaN) {
+      return 0;
+    } else {
+      return this;
+    }
   }
 
 }

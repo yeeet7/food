@@ -75,9 +75,9 @@ class _AddFoodState extends State<AddFood> {
                       amount: e.data()['amount'] ?? 1,
                       unit: Unit.values.elementAt(e.data()['unit']),
                       kcal: e.data()['calories'] ?? 0,
-                      carbs: e.data()['carbs'] ?? 0,
-                      proteins: e.data()['proteins'] ?? 0,
-                      fats: e.data()['fats'] ?? 0
+                      carbs: e.data()['carbs'] ?? 0.0,
+                      proteins: e.data()['proteins'] ?? 0.0,
+                      fats: e.data()['fats'] ?? 0.0
                     ),
                     setstate: () {widget.setstate.call(); setState(() {});},
                   )

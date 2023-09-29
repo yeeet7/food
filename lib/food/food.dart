@@ -333,9 +333,9 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
                 'unit': unit.index,
                 'calories': int.parse(kcalCtrl.text),
-                'carbs': int.parse(carbsCtrl.text),
-                'proteins': int.parse(proteinsCtrl.text),
-                'fats': int.parse(fatsCtrl.text),
+                'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
+                'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),
+                'fats': int.tryParse(fatsCtrl.text) == null ? double.parse(fatsCtrl.text) : int.parse(fatsCtrl.text),
               });
               widget.setstate.call();
               Navigator.pop(context);
@@ -346,9 +346,9 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
                 'unit': unit.index,
                 'calories': int.parse(kcalCtrl.text),
-                'carbs': int.parse(carbsCtrl.text),
-                'proteins': int.parse(proteinsCtrl.text),
-                'fats': int.parse(fatsCtrl.text),
+                'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
+                'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),
+                'fats': int.tryParse(fatsCtrl.text) == null ? double.parse(fatsCtrl.text) : int.parse(fatsCtrl.text),
               }, SetOptions(merge: true));
               widget.setstate.call();
               Navigator.pop(context);

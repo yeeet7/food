@@ -216,9 +216,9 @@ class Food {
   final Unit unit;
   final int amount;
   final int kcal;
-  final int carbs;
-  final int proteins;
-  final int fats;
+  final num carbs;
+  final num proteins;
+  final num fats;
 
   @override
   String toString() {

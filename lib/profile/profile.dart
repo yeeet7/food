@@ -97,9 +97,73 @@ class _ProfileState extends State<Profile> {
                   ],
                 )
               ],
-            )
+            ),
 
             /// TODO: BMI
+            DefaultBox(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Body Mass Index (BMI)', style: TextStyle(fontWeight: FontWeight.bold),),
+                  const SizedBox(height: 6,),
+                  Text('${(userInfo.weight / (userInfo.height * userInfo.height) * 100000).round() / 10}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                  /// arrow
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: remap(15, 40, (userInfo.weight / (userInfo.height * userInfo.height) * 100000).round() / 10, 0, MediaQuery.of(context).size.width - 48) - 1 - (25/2)),
+                      const SizedBox(
+                        width: 25,
+                        child: Icon(Icons.keyboard_arrow_down_rounded),
+                      )
+                    ],
+                  ),
+                  /// chart
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ...List.generate(
+                        5,
+                        (index) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: remap(
+                                0,
+                                25,
+                                [3.5, 6.5, 5, 5, 5][index],
+                                0,
+                                MediaQuery.of(context).size.width - 48
+                              ) - 1,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: [const Color(0xFF28b6f6), const Color(0xFF66bb6a), const Color(0xFFffc928), const Color(0xFFff7143), const Color(0xFFee534f)][index],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            index < 4 ?
+                              Text(['15', '18.5', '25', '30'][index], style: const TextStyle(fontWeight: FontWeight.bold),):
+                              SizedBox(
+                                width: remap(0, 25, 5, 0, MediaQuery.of(context).size.width - 48) - 1,
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('35', style: TextStyle(fontWeight: FontWeight.bold),),
+                                    Text('40', style: TextStyle(fontWeight: FontWeight.bold),),
+                                  ]
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+
             /// TODO: weight
 
           ],

@@ -22,6 +22,7 @@ void main() async {
 }
 
 final googleSignIn = GoogleSignIn();
+late UserAmounts userInfo;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -68,6 +69,14 @@ class MyApp extends StatelessWidget {
                   snap.data?.data()?['height'] != null &&
                   snap.data?.data()?['weight'] != null)
                 ) {
+                  userInfo = UserAmounts._(
+                    snap.data!.data()!['height'],
+                    snap.data!.data()!['weight'],
+                    snap.data!.data()!['calories'],
+                    snap.data!.data()!['carbs'],
+                    snap.data!.data()!['proteins'],
+                    snap.data!.data()!['fats'],
+                  );
                   return const App();
                 } else {
                   return const Intro();
@@ -132,6 +141,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         }.call(),
         builder: (context, snapshot) {
           return SingleChildScrollView(
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 DefaultBox(
@@ -259,19 +269,21 @@ class DefaultBox extends StatelessWidget {
     this.height,
     this.shadows,
     this.child,
+    this.margin,
     super.key,
   });
   final Widget? child;
   final List<BoxShadow>? shadows;
   final double? width;
   final double? height;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width ?? MediaQuery.of(context).size.width,
       height: height,
-      margin: const EdgeInsets.all(12),
+      margin: margin,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
@@ -340,11 +352,20 @@ class MainPageInfo {
 
 class UserAmounts {
 
-  UserAmounts._(this.kcal, this.carbs, this.proteins, this.fats);
+  UserAmounts._(
+    this.height,
+    this.weight,
+    this.kcal,
+    this.carbs,
+    this.proteins,
+    this.fats,
+  );
 
   static Future<UserAmounts> get() async {
     DocumentSnapshot<Map> doc = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).get();
     return UserAmounts._(
+      doc.data()?['height'] ?? 0,
+      doc.data()?['weight'] ?? 0,
       doc.data()?['calories'] ?? 0,
       doc.data()?['carbs'] ?? 0,
       doc.data()?['proteins'] ?? 0,
@@ -352,6 +373,8 @@ class UserAmounts {
     );
   }
 
+  final int height;
+  final int weight;
   final int kcal;
   final int carbs;
   final int proteins;
@@ -359,7 +382,7 @@ class UserAmounts {
 
   @override
   String toString() {
-    return 'UserAmounts($kcal, $carbs, $proteins, $fats)';
+    return 'UserAmounts($height, $weight, $kcal, $carbs, $proteins, $fats)';
   }
 
 }
@@ -374,4 +397,8 @@ extension on num {
     }
   }
 
+}
+
+double remap(num inMin, num inMax, num value, num outMin, num outMax) {
+  return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
 }

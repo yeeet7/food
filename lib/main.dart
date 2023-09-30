@@ -69,14 +69,16 @@ class MyApp extends StatelessWidget {
                   snap.data?.data()?['height'] != null &&
                   snap.data?.data()?['weight'] != null)
                 ) {
-                  userInfo = UserAmounts._(
-                    snap.data!.data()!['height'],
-                    snap.data!.data()!['weight'],
-                    snap.data!.data()!['calories'],
-                    snap.data!.data()!['carbs'],
-                    snap.data!.data()!['proteins'],
-                    snap.data!.data()!['fats'],
-                  );
+                  if(snap.data != null) {
+                    userInfo = UserAmounts._(
+                      snap.data!.data()!['height'],
+                      snap.data!.data()!['weight'],
+                      snap.data!.data()!['calories'],
+                      snap.data!.data()!['carbs'],
+                      snap.data!.data()!['proteins'],
+                      snap.data!.data()!['fats'],
+                    );
+                  }
                   return const App();
                 } else {
                   return const Intro();
@@ -373,6 +375,23 @@ class UserAmounts {
     );
   }
 
+  double getBmi() => (userInfo.weight / (userInfo.height * userInfo.height) * 100000).round() / 10;
+  BmiType getBmiType() {
+    if(getBmi() < 18.5) {
+      return BmiType.underweight;
+    } else if(getBmi() < 25) {
+      return BmiType.normal;
+    } else if(getBmi() < 30) {
+      return BmiType.overweight;
+    } else if(getBmi() < 35) {
+      return BmiType.obesity1;
+    } else if(getBmi() < 40) {
+      return BmiType.obesity2;
+    } else {
+      return BmiType.obesity3;
+    }
+  }
+
   final int height;
   final int weight;
   final int kcal;
@@ -385,6 +404,15 @@ class UserAmounts {
     return 'UserAmounts($height, $weight, $kcal, $carbs, $proteins, $fats)';
   }
 
+}
+
+enum BmiType {
+  underweight,
+  normal,
+  overweight,
+  obesity1,
+  obesity2,
+  obesity3,
 }
 
 extension on num {

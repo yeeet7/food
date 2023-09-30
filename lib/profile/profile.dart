@@ -107,12 +107,18 @@ class _ProfileState extends State<Profile> {
                 children: [
                   const Text('Body Mass Index (BMI)', style: TextStyle(fontWeight: FontWeight.bold),),
                   const SizedBox(height: 6,),
-                  Text('${(userInfo.weight / (userInfo.height * userInfo.height) * 100000).round() / 10}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                  Text(
+                    '${userInfo.getBmi()} - ${userInfo.getBmiType().name}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18
+                    ),
+                  ),
                   /// arrow
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(width: remap(15, 40, (userInfo.weight / (userInfo.height * userInfo.height) * 100000).round() / 10, 0, MediaQuery.of(context).size.width - 48) - 1 - (25/2)),
+                      SizedBox(width: remap(15, 40, userInfo.getBmi(), 0, MediaQuery.of(context).size.width - 48) - 1 - (25/2)),
                       const SizedBox(
                         width: 25,
                         child: Icon(Icons.keyboard_arrow_down_rounded),

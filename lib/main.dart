@@ -11,7 +11,7 @@ import 'package:food/widgets/circular_percent_indicator.dart';
 import 'package:food/widgets/food_tile.dart';
 import 'package:food/widgets/linear_percent_indicator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:food/profile.dart';
+import 'package:food/profile/profile.dart';
 import 'package:food/start/login.dart';
 
 void main() async {
@@ -95,6 +95,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
+        title: const Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         actions: [
           Container(
             width: 40,

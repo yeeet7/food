@@ -92,6 +92,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             width: 40,
             height: 40,
             margin: const EdgeInsets.all(15/2),
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(80)

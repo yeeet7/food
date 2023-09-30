@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:833836611445:android:ad39100e3a5be44e0ec53c",
+        "mobilesdk_app_id": "1:833836611445:android:c5e3b5913842b1820ec53c",
         "android_client_info": {
           "package_name": "com.yeeet.food"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "833836611445-na48hse7t735crf42a5pm1n05h2ka1g5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yeeet.food",
+            "certificate_hash": "7db85b70eb7d420ddc8a2cad78faad26d15ed5b1"
+          }
+        },
         {
           "client_id": "833836611445-k50l12edf3kn76soc21lf40ug4apv5o8.apps.googleusercontent.com",
           "client_type": 3

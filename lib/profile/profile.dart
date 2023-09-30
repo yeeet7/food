@@ -68,6 +68,44 @@ class _ProfileState extends State<Profile> {
         ],
       ),
 
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            
+            /// profile
+            Row(
+              children: [
+                Container(
+                  clipBehavior: Clip.hardEdge,
+                  width: MediaQuery.of(context).size.width * .25,
+                  height: MediaQuery.of(context).size.width * .25,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(200)
+                  ),
+                  child: FirebaseAuth.instance.currentUser?.photoURL != null ? 
+                    Image.network(FirebaseAuth.instance.currentUser!.photoURL!) :
+                    Center(child: Text(FirebaseAuth.instance.currentUser?.displayName?[0] ?? '?')),
+                ),
+                const SizedBox(width: 24),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(FirebaseAuth.instance.currentUser?.displayName ?? '', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    Text(FirebaseAuth.instance.currentUser?.email ?? '', style: const TextStyle(color: Colors.white54),),
+                  ],
+                )
+              ],
+            )
+
+            /// TODO: BMI
+            /// TODO: weight
+
+          ],
+        ),
+      ),
+
     );
   }
 }

@@ -59,7 +59,15 @@ class MyApp extends StatelessWidget {
             return StreamBuilder(
               stream: FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
               builder: (context, snap) {
-                if(snap.data == null || snap.data?.data()?['calories'] != null) {
+                if(
+                  snap.data == null ||
+                  (snap.data?.data()?['calories'] != null &&
+                  snap.data?.data()?['carbs'] != null &&
+                  snap.data?.data()?['proteins'] != null &&
+                  snap.data?.data()?['fats'] != null &&
+                  snap.data?.data()?['height'] != null &&
+                  snap.data?.data()?['weight'] != null)
+                ) {
                   return const App();
                 } else {
                   return const Intro();

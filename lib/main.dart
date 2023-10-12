@@ -243,7 +243,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
                 const SizedBox(height: 6),
                 
-                if(snapshot.data != null) ...snapshot.data!.foods.map(
+                if(snapshot.data != null) ...snapshot.data!.foods.sorted((a, b) => a.diaryId.compareTo(b.diaryId)).map(
                   (e) =>  FoodEntryTile(e, () => setState(() {}), margin: const EdgeInsets.symmetric(vertical: 6),)
                 ).toList()
 
@@ -422,6 +422,16 @@ extension on num {
     } else {
       return this;
     }
+  }
+
+}
+
+extension Sorting<E> on List<E> {
+
+  List<E> sorted([int Function(E, E)? compare]) {
+    List<E> sortedList = this;
+    sortedList.sort(compare);
+    return sortedList;
   }
 
 }

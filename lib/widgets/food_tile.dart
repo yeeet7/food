@@ -203,6 +203,7 @@ class Food {
 
   Food({
     required this.id,
+    required this.imagePath,
     required this.name,
     required this.amount,
     required this.unit,
@@ -213,6 +214,7 @@ class Food {
   });
 
   final String id;
+  final String? imagePath;
   final String name;
   final Unit unit;
   final int amount;
@@ -237,6 +239,7 @@ class FoodEntry extends Food {
     required super.unit,
     required super.amount,
     required super.id,
+    required super.imagePath,
     required super.kcal,
     required super.carbs,
     required super.proteins,
@@ -257,6 +260,7 @@ class FoodEntry extends Food {
     return FoodEntry._(
       id: id,
       diaryId: diaryId,
+      imagePath: food.data()['imagePath'],
       diaryAmount: amount,
       name: food.data()['name'],
       amount: food.data()['amount'],

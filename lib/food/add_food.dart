@@ -73,6 +73,7 @@ class _AddFoodState extends State<AddFood> {
                       id: e.id,
                       name: e.data()['name'] ?? 'name',
                       amount: e.data()['amount'] ?? 1,
+                      imagePath: e.data()['imagePath'],
                       unit: Unit.values.elementAt(e.data()['unit']),
                       kcal: e.data()['calories'] ?? 0,
                       carbs: e.data()['carbs'] ?? 0.0,

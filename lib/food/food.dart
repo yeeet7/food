@@ -1,10 +1,16 @@
 
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+import 'dart:io';
 import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/widgets/food_tile.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FoodWidget extends StatefulWidget {
   const FoodWidget(this.intent, this.setstate, {this.food, super.key});
@@ -17,6 +23,9 @@ class FoodWidget extends StatefulWidget {
 }
 
 class _FoodWidgetState extends State<FoodWidget> {
+
+  String? tempImage;
+  bool tempImageFile = false;
 
   late Unit unit;
   late final TextEditingController multiplierCtrl;
@@ -43,6 +52,10 @@ class _FoodWidgetState extends State<FoodWidget> {
     carbsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.carbs ?? '1').toString()));
     proteinsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.proteins ?? '1').toString()));
     fatsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.fats ?? '1').toString()));
+    Future.delayed(Duration.zero, () async {
+      String? image = widget.food?.imagePath != null ? (await FirebaseStorage.instance.ref(widget.food!.imagePath).getDownloadURL()):null;
+      setState(() {tempImage = image; tempImageFile = false;});
+    });
   }
 
   @override
@@ -72,11 +85,23 @@ class _FoodWidgetState extends State<FoodWidget> {
                     width: MediaQuery.of(context).size.width * .4,
                     height: MediaQuery.of(context).size.width * .4,
                     alignment: Alignment.center,
+                    clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(24)
                     ),
-                    child: Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor),
+                    child: () {
+                      if([FoodIntent.create, FoodIntent.edit].contains(widget.intent)) {
+                        log('$tempImage:$tempImageFile');
+                        if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
+                        return tempImageFile ?
+                          Image.file(File(tempImage!), fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4,):
+                          Image.network(tempImage!, fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4,);
+                      } else {
+                        if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
+                        return Image.network(tempImage!, fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4);
+                      }
+                    }.call(),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * .4,
@@ -106,7 +131,14 @@ class _FoodWidgetState extends State<FoodWidget> {
                           width: MediaQuery.of(context).size.width * .2,
                           child: IconButton(
                             icon: Icon(index == 0 ? FontAwesomeIcons.cameraRetro : index == 1 ? FontAwesomeIcons.image : FontAwesomeIcons.trash, color: Colors.white38),
-                            onPressed: () {}
+                            onPressed: 
+                              index == 0 ? () async {
+                              tempImage = (await ImagePicker().pickImage(source: ImageSource.camera))?.path;
+                              setState(() {tempImageFile = true;});
+                            } : index == 1 ? () async {
+                              tempImage = (await ImagePicker().pickImage(source: ImageSource.gallery))?.path;
+                              setState(() {tempImageFile = true;});
+                            } : () => setState(() => tempImage = null)
                           ),
                         )
                       )
@@ -325,13 +357,14 @@ class _FoodWidgetState extends State<FoodWidget> {
         icon: Icon(Icons.add, color: Theme.of(context).primaryColor,),
         label: Text(widget.intent == FoodIntent.add ? 'add' : widget.intent == FoodIntent.edit ? 'save' : 'create', style: TextStyle(color: Theme.of(context).primaryColor),),
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        onPressed: () {
+        onPressed: () async {
           switch(widget.intent) {
             case FoodIntent.create:
               FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(DateTime.now().toString()).set({
                 'name': nameCtrl.text,
                 'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
                 'unit': unit.index,
+                'imagePath': tempImage != null ? (await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').putFile(File(tempImage!)).then((p0) => p0.ref.fullPath)) : null,
                 'calories': int.parse(kcalCtrl.text),
                 'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
                 'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),
@@ -345,6 +378,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'name': nameCtrl.text,
                 'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
                 'unit': unit.index,
+                'imagePath': tempImage != null ? (await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').putFile(File(tempImage!)).then((p0) => p0.ref.fullPath)) : null,
                 'calories': int.parse(kcalCtrl.text),
                 'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
                 'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),

@@ -1,6 +1,5 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food/main.dart';
 import 'package:food/profile/settings.dart';
@@ -99,7 +98,6 @@ class _ProfileState extends State<Profile> {
               ],
             ),
 
-            /// TODO: BMI
             DefaultBox(
               margin: const EdgeInsets.symmetric(vertical: 12),
               child: Column(

@@ -103,14 +103,15 @@ class FoodTile extends StatelessWidget {
 }
 
 class FoodEntryTile extends StatelessWidget {
-  const FoodEntryTile(this.foodEntry, this.setstate, {super.key});
+  const FoodEntryTile(this.foodEntry, this.setstate, {this.margin = const EdgeInsets.all(6), super.key});
   final FoodEntry foodEntry;
+  final EdgeInsets? margin;
   final void Function()? setstate;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(6),
+      margin: margin,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),

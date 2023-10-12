@@ -240,12 +240,11 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
+
+                const SizedBox(height: 6),
                 
                 if(snapshot.data != null) ...snapshot.data!.foods.map(
-                  (e) =>  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
-                    child: FoodEntryTile(e, () => setState(() {}))
-                  )
+                  (e) =>  FoodEntryTile(e, () => setState(() {}), margin: const EdgeInsets.symmetric(vertical: 6),)
                 ).toList()
 
               ],

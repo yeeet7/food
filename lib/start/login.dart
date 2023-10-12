@@ -88,7 +88,7 @@ class Login extends StatelessWidget {
               const Icon(FontAwesomeIcons.google),
               width: 40,
               onTap: () async {
-                GoogleSignInAccount? account = await googleSignIn.signIn(); //TODO: need to wait 30 days before first "food" project is deleted and sha1 is not in conflict (28/8/2023) 
+                GoogleSignInAccount? account = await googleSignIn.signIn();
                 GoogleSignInAuthentication auth = await account!.authentication;
                 await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(idToken: auth.idToken, accessToken: auth.accessToken));
               }

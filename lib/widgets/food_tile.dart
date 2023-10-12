@@ -145,7 +145,7 @@ class FoodEntryTile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(foodEntry.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                          Text('${foodEntry.diaryAmount}${foodEntry.unit == Unit.gram ? 'g' : foodEntry.unit == Unit.milliliter ? 'ml' : 'x'} - ${foodEntry.name}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
                           Row(
                             children: [
                               Text('${foodEntry.kcal}kcal  ', style: const TextStyle(fontSize: 12, color: Colors.orange)),

@@ -136,7 +136,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                             } : index == 1 ? () async {
                               tempImage = (await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 25))?.path;
                               setState(() {tempImageFile = true;});
-                            } : () => setState(() => tempImage = null)
+                            } : () => setState(() {tempImage = null; tempImageFile = true;})
                           ),
                         )
                       )
@@ -372,6 +372,7 @@ class _FoodWidgetState extends State<FoodWidget> {
               Navigator.pop(context);
               break;
             case FoodIntent.edit:
+              if(tempImage == null && widget.food?.imagePath != null) await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').delete();
               FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').doc(widget.food?.id).set({
                 'name': nameCtrl.text,
                 'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),

@@ -28,7 +28,7 @@ class FoodTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(intent, setstate, food: food,))),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(intent, setstate, food: food,))).then((value) => setstate.call()),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

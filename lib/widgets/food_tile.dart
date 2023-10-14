@@ -3,6 +3,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/food.dart';
@@ -40,12 +41,20 @@ class FoodTile extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.all(6),
                         alignment: Alignment.center,
-                        padding: const EdgeInsets.all(12),
+                        width: 48,
+                        height: 48,
+                        padding: food.imagePath != null ? EdgeInsets.zero : const EdgeInsets.all(12),
+                        clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(12)
                         ),
-                        child: Icon(FontAwesomeIcons.appleWhole, color: Theme.of(context).primaryColor,),
+                        child: food.imagePath != null ? FutureBuilder(
+                          future: FirebaseStorage.instance.ref(food.imagePath!).getDownloadURL(),
+                          builder: (context, snapshot) => snapshot.data != null ?
+                            SizedBox(width: 48, height: 48, child: Image.network(snapshot.data!, fit: BoxFit.cover,)):
+                            Icon(FontAwesomeIcons.appleWhole, color: Theme.of(context).primaryColor,),
+                        ):Icon(FontAwesomeIcons.appleWhole, color: Theme.of(context).primaryColor,),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,6 +121,7 @@ class FoodEntryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: margin,
+      height: 60,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
@@ -134,12 +144,20 @@ class FoodEntryTile extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.all(6),
                         alignment: Alignment.center,
-                        padding: const EdgeInsets.all(12),
+                        padding: foodEntry.imagePath != null ? EdgeInsets.zero : const EdgeInsets.all(12),
+                        clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary,
                           borderRadius: BorderRadius.circular(12)
                         ),
-                        child: Icon(FontAwesomeIcons.appleWhole, color: Theme.of(context).primaryColor,),
+                        child: foodEntry.imagePath != null ?
+                          FutureBuilder(
+                            future: FirebaseStorage.instance.ref(foodEntry.imagePath!).getDownloadURL(),
+                            builder: (context, snapshot) => snapshot.data != null ?
+                              SizedBox(width: 48, height: 48, child: Image.network(snapshot.data!, fit: BoxFit.cover)) :
+                              Icon(FontAwesomeIcons.appleWhole, color: Theme.of(context).primaryColor,)
+                          ):
+                          Icon(FontAwesomeIcons.appleWhole, color: Theme.of(context).primaryColor,),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

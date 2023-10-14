@@ -1,7 +1,6 @@
 
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -92,7 +91,6 @@ class _FoodWidgetState extends State<FoodWidget> {
                     ),
                     child: () {
                       if([FoodIntent.create, FoodIntent.edit].contains(widget.intent)) {
-                        log('$tempImage:$tempImageFile');
                         if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
                         return tempImageFile ?
                           Image.file(File(tempImage!), fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4,):
@@ -133,10 +131,10 @@ class _FoodWidgetState extends State<FoodWidget> {
                             icon: Icon(index == 0 ? FontAwesomeIcons.cameraRetro : index == 1 ? FontAwesomeIcons.image : FontAwesomeIcons.trash, color: Colors.white38),
                             onPressed: 
                               index == 0 ? () async {
-                              tempImage = (await ImagePicker().pickImage(source: ImageSource.camera))?.path;
+                              tempImage = (await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 25))?.path;
                               setState(() {tempImageFile = true;});
                             } : index == 1 ? () async {
-                              tempImage = (await ImagePicker().pickImage(source: ImageSource.gallery))?.path;
+                              tempImage = (await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 25))?.path;
                               setState(() {tempImageFile = true;});
                             } : () => setState(() => tempImage = null)
                           ),
@@ -378,7 +376,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'name': nameCtrl.text,
                 'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
                 'unit': unit.index,
-                'imagePath': tempImage != null ? (await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').putFile(File(tempImage!)).then((p0) => p0.ref.fullPath)) : null,
+                'imagePath': tempImageFile ? (tempImage != null ? (await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').putFile(File(tempImage!)).then((p0) => p0.ref.fullPath)) : null) : widget.food?.imagePath,
                 'calories': int.parse(kcalCtrl.text),
                 'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
                 'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),

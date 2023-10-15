@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: const Color(0xFF101010),
         colorScheme: const ColorScheme.dark(
+          tertiary: Color(0xFF212121),
           secondary: Color(0xFF171717),
           primary: Color(0xFF101010),
         ),
@@ -268,16 +269,20 @@ class DefaultBox extends StatelessWidget {
   const DefaultBox({
     this.width,
     this.height,
+    this.bgColor,
     this.shadows,
     this.child,
     this.margin,
+    this.padding = const EdgeInsets.all(12),
     super.key,
   });
   final Widget? child;
+  final Color? bgColor;
   final List<BoxShadow>? shadows;
   final double? width;
   final double? height;
   final EdgeInsets? margin;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
@@ -285,9 +290,10 @@ class DefaultBox extends StatelessWidget {
       width: width ?? MediaQuery.of(context).size.width,
       height: height,
       margin: margin,
-      padding: const EdgeInsets.all(12),
+      padding: padding,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: bgColor ?? Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
         boxShadow: shadows ?? const [
           BoxShadow(
@@ -438,4 +444,10 @@ extension Sorting<E> on List<E> {
 
 double remap(num inMin, num inMax, num value, num outMin, num outMax) {
   return outMin + (value - inMin) * (outMax - outMin) / (inMax - inMin);
+}
+
+Size textToSize(String text, TextStyle style) {
+  TextPainter painter = TextPainter(text: TextSpan(text: text, style: style), textDirection: TextDirection.ltr);
+  painter.layout();
+  return painter.size;
 }

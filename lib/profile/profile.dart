@@ -1,5 +1,8 @@
 
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:food/main.dart';
 import 'package:food/profile/settings.dart';
@@ -11,6 +14,8 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
+WeightTimePeriod weightGraphTimePeriodValue = WeightTimePeriod.month;
+
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class _ProfileState extends State<Profile> {
 
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        title: const Text('Hi', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+        title: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.pop(context),
@@ -73,29 +78,32 @@ class _ProfileState extends State<Profile> {
           children: [
             
             /// profile
-            Row(
-              children: [
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  width: MediaQuery.of(context).size.width * .25,
-                  height: MediaQuery.of(context).size.width * .25,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.circular(200)
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              child: Row(
+                children: [
+                  Container(
+                    clipBehavior: Clip.hardEdge,
+                    width: MediaQuery.of(context).size.width * .25,
+                    height: MediaQuery.of(context).size.width * .25,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: BorderRadius.circular(200)
+                    ),
+                    child: FirebaseAuth.instance.currentUser?.photoURL != null ? 
+                      Image.network(FirebaseAuth.instance.currentUser!.photoURL!) :
+                      Center(child: Text(FirebaseAuth.instance.currentUser?.displayName?[0] ?? '?')),
                   ),
-                  child: FirebaseAuth.instance.currentUser?.photoURL != null ? 
-                    Image.network(FirebaseAuth.instance.currentUser!.photoURL!) :
-                    Center(child: Text(FirebaseAuth.instance.currentUser?.displayName?[0] ?? '?')),
-                ),
-                const SizedBox(width: 24),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(FirebaseAuth.instance.currentUser?.displayName ?? '', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                    Text(FirebaseAuth.instance.currentUser?.email ?? '', style: const TextStyle(color: Colors.white54),),
-                  ],
-                )
-              ],
+                  const SizedBox(width: 24),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(FirebaseAuth.instance.currentUser?.displayName ?? '', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                      Text(FirebaseAuth.instance.currentUser?.email ?? '', style: const TextStyle(color: Colors.white54),),
+                    ],
+                  )
+                ],
+              ),
             ),
 
             DefaultBox(
@@ -103,13 +111,13 @@ class _ProfileState extends State<Profile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Body Mass Index (BMI)', style: TextStyle(fontWeight: FontWeight.bold),),
+                  const Text('Body Mass Index (BMI)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                   const SizedBox(height: 6,),
                   Text(
                     '${userInfo.getBmi()} - ${userInfo.getBmiType().name}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18
+                      fontSize: 16
                     ),
                   ),
                   /// arrow
@@ -169,6 +177,206 @@ class _ProfileState extends State<Profile> {
             ),
 
             ///TODO: #2
+            
+            DefaultBox(
+              width: MediaQuery.of(context).size.width - 24,
+              // height: MediaQuery.of(context).size.width - 24,
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              child: Column(
+                children: [
+
+                  //*titles
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Weight', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                            SizedBox(height: 6),
+                            Text('56.0 kg', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          ],
+                        ),
+                        DropdownButton(
+                          value: weightGraphTimePeriodValue.index,
+                          underline: const SizedBox.shrink(),
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          icon: Container(
+                            margin: const EdgeInsets.only(left: 6),
+                            child: Transform.rotate(
+                              angle: pi*1.5,
+                              child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20)
+                            ),
+                          ),
+                          items: [
+                            DropdownMenuItem(value: WeightTimePeriod.week.index, child: const Text('Last week')),
+                            DropdownMenuItem(value: WeightTimePeriod.month.index, child: const Text('Last month')),
+                            DropdownMenuItem(value: WeightTimePeriod.year.index, child: const Text('Last year')),
+                            DropdownMenuItem(value: WeightTimePeriod.all.index, child: const Text('All time')),
+                          ],
+                          onChanged: (obj) {
+                            switch (obj as int) {
+                              case 0:
+                                setState(() {weightGraphTimePeriodValue = WeightTimePeriod.week;});break;
+                              case 1:
+                                setState(() {weightGraphTimePeriodValue = WeightTimePeriod.month;});break;
+                              case 2:
+                                setState(() {weightGraphTimePeriodValue = WeightTimePeriod.year;});break;
+                              case 3:
+                                setState(() {weightGraphTimePeriodValue = WeightTimePeriod.all;});break;
+                              default:
+                                setState(() {weightGraphTimePeriodValue = WeightTimePeriod.month;});
+                            }
+                          }
+                        )
+                      ],
+                    ),
+                  ),
+
+                  //* every part of the graph 
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 48,
+                    height: MediaQuery.of(context).size.width - 48,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        ///left titles
+                        SizedBox(
+                          width: textToSize('70', const TextStyle()).width + 8,
+                          height: MediaQuery.of(context).size.width - 48 - (textToSize('Today', const TextStyle()).height + 8),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('50'),
+                              Text('55'),
+                              Text('60'),
+                              Text('65'),
+                              Text('70'),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ///graph
+                            Container(
+                              width: MediaQuery.of(context).size.width - 48 - (textToSize('70', const TextStyle()).width + 8),
+                              height: MediaQuery.of(context).size.width - 48 - (textToSize('Today', const TextStyle()).height + 8),
+                              // clipBehavior: Clip.hardEdge,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade800)
+                              ),
+                              child: LineChart(
+                                LineChartData(
+                                  minX: 0,
+                                  maxX: 30,
+                                  minY: 50,
+                                  maxY: 70,
+                                  lineTouchData: LineTouchData(
+                                    touchTooltipData: LineTouchTooltipData(
+                                      tooltipBgColor: Theme.of(context).colorScheme.tertiary,
+                                      tooltipRoundedRadius: 12,
+                                    )
+                                  ),
+                                  borderData: FlBorderData(show: false),
+                                  clipData: const FlClipData.all(),
+                                  titlesData: const FlTitlesData(show: false,),
+                                  lineBarsData: [
+                                    LineChartBarData(
+                                      isCurved: true,
+                                      dotData: const FlDotData(show: false),
+                                      barWidth: 3,
+                                      color: Theme.of(context).primaryColor,
+                                      belowBarData: BarAreaData(
+                                        show: true,
+                                        gradient: LinearGradient(
+                                          colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor.withOpacity(0)],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                        )
+                                      ),
+                                      spots: [
+                                        const FlSpot(-10, 50),
+                                        const FlSpot(0, 56),
+                                        const FlSpot(5, 56),
+                                        const FlSpot(10, 58),
+                                        const FlSpot(15, 60),
+                                        const FlSpot(20, 58),
+                                        const FlSpot(25, 59),
+                                        const FlSpot(30, 64),
+                                      ]
+                                    ),
+                                  ]
+                                )
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 48 - textToSize('70', const TextStyle()).width - 8,
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text('Date'),
+                                  Text('Today'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //* log value button
+                  DefaultBox(
+                    width: MediaQuery.of(context).size.width - 48,
+                    height: 40,
+                    shadows: const [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 7.5,
+                        spreadRadius: 1,
+                        offset: Offset(1.5, 1.5)
+                      ),
+                      BoxShadow(
+                        color: Color(0xFF191919),
+                        blurRadius: 7.5,
+                        spreadRadius: 1,
+                        offset: Offset(-1.5, -1.5)
+                      ),
+                    ],
+                    bgColor: Theme.of(context).colorScheme.primary,
+                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.zero,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 12, right: 6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Log value', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Icon(Icons.arrow_forward_ios_rounded),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
 
           ],
         ),
@@ -176,4 +384,11 @@ class _ProfileState extends State<Profile> {
 
     );
   }
+}
+
+enum WeightTimePeriod {
+  week,
+  month,
+  year,
+  all,
 }

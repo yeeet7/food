@@ -168,7 +168,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
 
-            /// TODO: weight
+            ///TODO: #2
 
           ],
         ),

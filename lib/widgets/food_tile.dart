@@ -144,6 +144,8 @@ class FoodEntryTile extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.all(6),
                         alignment: Alignment.center,
+                        width: 48,
+                        height: 48,
                         padding: foodEntry.imagePath != null ? EdgeInsets.zero : const EdgeInsets.all(12),
                         clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(

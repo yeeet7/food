@@ -1,6 +1,5 @@
 
-import 'dart:math';
-
+import 'dart:math' as math;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -191,13 +190,13 @@ class _ProfileState extends State<Profile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Weight', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                            SizedBox(height: 6),
-                            Text('56.0 kg', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            const Text('Weight', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                            const SizedBox(height: 6),
+                            Text('${double.parse((userInfo.weight.entries.last.value * 10).toString().split('.')[0]) / 10} kg', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                           ],
                         ),
                         DropdownButton(
@@ -207,7 +206,7 @@ class _ProfileState extends State<Profile> {
                           icon: Container(
                             margin: const EdgeInsets.only(left: 6),
                             child: Transform.rotate(
-                              angle: pi*1.5,
+                              angle: math.pi*1.5,
                               child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20)
                             ),
                           ),
@@ -247,17 +246,18 @@ class _ProfileState extends State<Profile> {
                       children: [
                         ///left titles
                         SizedBox(
-                          width: textToSize('70', const TextStyle()).width + 8,
+                          width: textToSize((((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element)) / 10).round() * 10) + 5).toString(), const TextStyle()).width + 8,
                           height: MediaQuery.of(context).size.width - 48 - (textToSize('Today', const TextStyle()).height + 8),
-                          child: const Column(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('50'),
-                              Text('55'),
-                              Text('60'),
-                              Text('65'),
-                              Text('70'),
+                              Text((((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element)) / 10).round() * 10) + 5).toString()),
+                              ...List.generate(
+                                (((((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element)) / 10).round() * 10) + 5)  - (((userInfo.weight.values.toList().reduce((value, element) => math.min(value, element)) - 5) / 10).round() * 10)) / 5).round() - 1,
+                                (index) => Text((((userInfo.weight.values.toList().reduce((value, element) => math.min(value, element)) - 5) / 10).round() * 10  + 5*(index+1)).toString())
+                              ).reversed,
+                              Text((((userInfo.weight.values.toList().reduce((value, element) => math.min(value, element)) - 5) / 10).round() * 10).toString()),
                             ],
                           ),
                         ),
@@ -266,7 +266,7 @@ class _ProfileState extends State<Profile> {
                           children: [
                             ///graph
                             Container(
-                              width: MediaQuery.of(context).size.width - 48 - (textToSize('70', const TextStyle()).width + 8),
+                              width: MediaQuery.of(context).size.width - 48 - (textToSize((((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element)) / 10).round() * 10) + 5).toString(), const TextStyle()).width + 8),
                               height: MediaQuery.of(context).size.width - 48 - (textToSize('Today', const TextStyle()).height + 8),
                               // clipBehavior: Clip.hardEdge,
                               decoration: BoxDecoration(
@@ -276,9 +276,9 @@ class _ProfileState extends State<Profile> {
                               child: LineChart(
                                 LineChartData(
                                   minX: 0,
-                                  maxX: 30,
-                                  minY: 50,
-                                  maxY: 70,
+                                  maxX: DateTime.now().difference(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value)).inDays.toDouble(),
+                                  minY: (((userInfo.weight.values.toList().reduce((value, element) => math.min(value, element)) - 5) / 10).round() * 10),
+                                  maxY: (((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element))  / 10).round() * 10) + 5),
                                   lineTouchData: LineTouchData(
                                     touchTooltipData: LineTouchTooltipData(
                                       tooltipBgColor: Theme.of(context).colorScheme.tertiary,
@@ -302,29 +302,25 @@ class _ProfileState extends State<Profile> {
                                           end: Alignment.bottomCenter,
                                         )
                                       ),
-                                      spots: [
-                                        const FlSpot(-10, 50),
-                                        const FlSpot(0, 56),
-                                        const FlSpot(5, 56),
-                                        const FlSpot(10, 58),
-                                        const FlSpot(15, 60),
-                                        const FlSpot(20, 58),
-                                        const FlSpot(25, 59),
-                                        const FlSpot(30, 64),
-                                      ]
+                                      spots: userInfo.getWeightByTime(weightGraphTimePeriodValue).entries.map(
+                                        (e) => FlSpot(
+                                          DateTime.now().difference(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value)).inDays.toDouble() - DateTime.now().difference(e.key).inDays,
+                                          e.value.toDouble(),
+                                        )
+                                      ).toList()
                                     ),
                                   ]
                                 )
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width - 48 - textToSize('70', const TextStyle()).width - 8,
-                              child: const Row(
+                              width: MediaQuery.of(context).size.width - 48 - textToSize((((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element)) / 10).round() * 10) + 5).toString(), const TextStyle()).width - 8,
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text('Date'),
-                                  Text('Today'),
+                                  Text(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value).toString().split(' ')[0]),
+                                  const Text('Today'),
                                 ],
                               ),
                             ),

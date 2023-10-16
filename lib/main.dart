@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
                   if(snap.data != null) {
                     userInfo = UserAmounts._(
                       snap.data!.data()!['height'],
-                      snap.data!.data()!['weight'],
+                      (snap.data!.data()!['weight'] as Map<String, dynamic>).cast<String, num>().map((key, value) => MapEntry(DateTime.parse(key), value)),
                       snap.data!.data()!['calories'],
                       snap.data!.data()!['carbs'],
                       snap.data!.data()!['proteins'],
@@ -372,7 +372,7 @@ class UserAmounts {
     DocumentSnapshot<Map> doc = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).get();
     return UserAmounts._(
       doc.data()?['height'] ?? 0,
-      doc.data()?['weight'] ?? 0,
+      (doc.data()?['weight'] as Map<String, dynamic>?)?.cast<String, num>().map((key, value) => MapEntry(DateTime.parse(key), value)) ?? <DateTime, num>{},
       doc.data()?['calories'] ?? 0,
       doc.data()?['carbs'] ?? 0,
       doc.data()?['proteins'] ?? 0,
@@ -380,7 +380,7 @@ class UserAmounts {
     );
   }
 
-  double getBmi() => (userInfo.weight / (userInfo.height * userInfo.height) * 100000).round() / 10;
+  double getBmi() => ((userInfo.weight.entries.last.value.toInt()) / (userInfo.height * userInfo.height) * 100000).round() / 10;
   BmiType getBmiType() {
     if(getBmi() < 18.5) {
       return BmiType.underweight;
@@ -397,8 +397,20 @@ class UserAmounts {
     }
   }
 
+  Map<DateTime, num> getWeightByTime(WeightTimePeriod time) {
+    if(time == WeightTimePeriod.week) {
+      return { for (var it in weight.entries.where((element) => DateTime.now().difference(element.key).inDays < 8 ? true : false)) (it).key : (it).value };
+    } else if(time == WeightTimePeriod.month) {
+      return { for (var it in weight.entries.where((element) => DateTime.now().difference(element.key).inDays < 31 ? true : false)) (it).key : (it).value };
+    } else if(time == WeightTimePeriod.year) {
+      return { for (var it in weight.entries.where((element) => DateTime.now().difference(element.key).inDays < 365 ? true : false)) (it).key : (it).value };
+    } else {
+      return weight;
+    }
+  }
+
   final int height;
-  final int weight;
+  final Map<DateTime, num> weight;
   final int kcal;
   final int carbs;
   final int proteins;

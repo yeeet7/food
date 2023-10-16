@@ -1,5 +1,8 @@
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math' as math;
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ class Profile extends StatefulWidget {
 }
 
 WeightTimePeriod weightGraphTimePeriodValue = WeightTimePeriod.month;
+TextEditingController weightValueCtrl = TextEditingController();
 
 class _ProfileState extends State<Profile> {
   @override
@@ -39,7 +43,6 @@ class _ProfileState extends State<Profile> {
               } else if(value == 1) {
                 await googleSignIn.signOut();
                 await FirebaseAuth.instance.signOut();
-                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               }
             },
@@ -355,7 +358,119 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).scaffoldBackgroundColor,
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(12))
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              padding: const EdgeInsets.all(12),
+                              margin: MediaQuery.of(context).viewInsets,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextField(
+                                    controller: weightValueCtrl,
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(width: 2, color: Theme.of(context).colorScheme.secondary)
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: const BorderSide(width: 2, color: Colors.white54)
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      DefaultBox(
+                                        width: MediaQuery.of(context).size.width / 2 - 48,
+                                        height: 40,
+                                        shadows: const [
+                                          BoxShadow(
+                                            color: Colors.black,
+                                            blurRadius: 7.5,
+                                            spreadRadius: 1,
+                                            offset: Offset(1.5, 1.5)
+                                          ),
+                                          BoxShadow(
+                                            color: Color(0xFF191919),
+                                            blurRadius: 7.5,
+                                            spreadRadius: 1,
+                                            offset: Offset(-1.5, -1.5)
+                                          ),
+                                        ],
+                                        bgColor: Theme.of(context).colorScheme.primary,
+                                        margin: const EdgeInsets.symmetric(vertical: 12),
+                                        padding: EdgeInsets.zero,
+                                        child: Material(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () {
+                                              weightValueCtrl.clear();
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Center(child: Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold))),
+                                          ),
+                                        ),
+                                      ),
+                                      DefaultBox(
+                                        width: MediaQuery.of(context).size.width / 2 - 48,
+                                        height: 40,
+                                        shadows: const [
+                                          BoxShadow(
+                                            color: Colors.black,
+                                            blurRadius: 7.5,
+                                            spreadRadius: 1,
+                                            offset: Offset(1.5, 1.5)
+                                          ),
+                                          BoxShadow(
+                                            color: Color(0xFF191919),
+                                            blurRadius: 7.5,
+                                            spreadRadius: 1,
+                                            offset: Offset(-1.5, -1.5)
+                                          ),
+                                        ],
+                                        bgColor: Theme.of(context).colorScheme.primary,
+                                        margin: const EdgeInsets.symmetric(vertical: 12),
+                                        padding: EdgeInsets.zero,
+                                        child: Material(
+                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              await firestore.FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).set(
+                                                {
+                                                  'weight': {
+                                                    DateTime.now().toString().split(' ')[0]: double.parse(weightValueCtrl.text)
+                                                  }
+                                                },
+                                                firestore.SetOptions(merge: true),
+                                              );
+                                              weightValueCtrl.clear();
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Center(child: Text('Done', style: TextStyle(fontWeight: FontWeight.bold))),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          ).then((value) {weightValueCtrl.clear(); setState(() {});});
+                        },
                         child: const Padding(
                           padding: EdgeInsets.only(left: 12, right: 6),
                           child: Row(

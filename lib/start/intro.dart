@@ -106,7 +106,7 @@ class _IntroState extends State<Intro> {
           FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).set({
             'height': int.parse(heightCtrl.text),
             'weight': {
-              DateTime.now().toString(): double.parse(weightCtrl.text)
+              DateTime.now().toString().split(' ')[0]: double.parse(weightCtrl.text)
             },
             'calories': int.parse(kcalCtrl.text),
             'carbs': int.parse(carbsCtrl.text),

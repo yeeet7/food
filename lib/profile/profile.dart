@@ -177,8 +177,6 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ),
-
-            ///TODO: #2
             
             DefaultBox(
               width: MediaQuery.of(context).size.width - 24,
@@ -310,7 +308,7 @@ class _ProfileState extends State<Profile> {
                                           DateTime.now().difference(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value)).inDays.toDouble() - DateTime.now().difference(e.key).inDays,
                                           e.value.toDouble(),
                                         )
-                                      ).toList()
+                                      ).toList().sorted((a, b) => a.x.compareTo(b.x))
                                     ),
                                   ]
                                 )

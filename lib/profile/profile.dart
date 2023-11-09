@@ -199,7 +199,7 @@ class _ProfileState extends State<Profile> {
                           children: [
                             const Text('Weight', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                             const SizedBox(height: 6),
-                            Text('${double.parse((userInfo.weight.entries.last.value * 10).toString().split('.')[0]) / 10} kg', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            Text('${double.parse(((userInfo.weight[userInfo.weight.entries.map((e) => DateTime.parse(e.key.toString())).reduce((value, element) => DateTime.fromMillisecondsSinceEpoch(math.max(value.millisecondsSinceEpoch, element.millisecondsSinceEpoch)))] ?? 0) * 10).toString().split('.')[0]) / 10} kg', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                           ],
                         ),
                         DropdownButton(

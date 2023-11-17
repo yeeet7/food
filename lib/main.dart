@@ -13,6 +13,7 @@ import 'package:food/widgets/linear_percent_indicator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:food/profile/profile.dart';
 import 'package:food/start/login.dart';
+import 'dart:math' as math;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -380,7 +381,7 @@ class UserAmounts {
     );
   }
 
-  double getBmi() => ((userInfo.weight.entries.last.value.toInt()) / (userInfo.height * userInfo.height) * 100000).round() / 10;
+  double getBmi() => ((double.parse(((userInfo.weight[userInfo.weight.entries.map((e) => DateTime.parse(e.key.toString())).reduce((value, element) => DateTime.fromMillisecondsSinceEpoch(math.max(value.millisecondsSinceEpoch, element.millisecondsSinceEpoch)))] ?? 0) * 10).toString().split('.')[0]) / 10) / (userInfo.height * userInfo.height) * 100000).round() / 10;
   BmiType getBmiType() {
     if(getBmi() < 18.5) {
       return BmiType.underweight;

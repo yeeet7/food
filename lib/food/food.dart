@@ -45,7 +45,7 @@ class _FoodWidgetState extends State<FoodWidget> {
   void initState() {
     super.initState();
     unit = widget.food?.unit ?? Unit.gram;
-    multiplierCtrl = TextEditingController.fromValue(TextEditingValue(text: '${widget.food?.amount ?? 1}${widget.food?.unit == Unit.portion ? 'x' : ''}'));
+    multiplierCtrl = TextEditingController.fromValue(TextEditingValue(text: '${widget.food is FoodEntry ? (widget.food as FoodEntry).diaryAmount : widget.food?.amount ?? 1}${widget.food?.unit == Unit.portion ? 'x' : ''}'));
     nameCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.food?.name ?? 'name'));
     kcalCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.kcal ?? '1').toString()));
     carbsCtrl = TextEditingController.fromValue(TextEditingValue(text: (widget.food?.carbs ?? '1').toString()));
@@ -90,7 +90,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                       borderRadius: BorderRadius.circular(24)
                     ),
                     child: () {
-                      if([FoodIntent.create, FoodIntent.edit].contains(widget.intent)) {
+                      if({FoodIntent.create, FoodIntent.edit}.contains(widget.intent)) {
                         if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
                         return tempImageFile ?
                           Image.file(File(tempImage!), fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4,):
@@ -104,7 +104,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * .4,
                     height: MediaQuery.of(context).size.width * .4,
-                    child: {FoodIntent.view, FoodIntent.add}.contains(widget.intent) ? Wrap(
+                    child: {FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent) ? Wrap(
                       runAlignment: WrapAlignment.spaceEvenly,
                       alignment: WrapAlignment.spaceEvenly,
                       children: List.generate(
@@ -153,7 +153,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                   SizedBox(
                     width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
                     child:  TextField(
-                      enabled: {FoodIntent.edit, FoodIntent.create}.contains(widget.intent),
+                      enabled: true,
                       onTapOutside: (event) => nameNode.unfocus(),
                       controller: nameCtrl,
                       focusNode: nameNode,
@@ -263,7 +263,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                       color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(12)
                     ),
-                    child: DropdownButtonFormField(
+                    child: {FoodIntent.create, FoodIntent.edit}.contains(widget.intent) ? DropdownButtonFormField(
                       value: unit.index,
                       alignment: Alignment.center,
                       borderRadius: BorderRadius.circular(12),
@@ -295,7 +295,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                           multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');
                         }
                       })
-                    ),
+                    ) : Text(unit.name),
                   )
                 ],
               ),
@@ -353,7 +353,7 @@ class _FoodWidgetState extends State<FoodWidget> {
 
       floatingActionButton: widget.intent != FoodIntent.view ? FloatingActionButton.extended(
         icon: Icon(Icons.add, color: Theme.of(context).primaryColor,),
-        label: Text(widget.intent == FoodIntent.add ? 'add' : widget.intent == FoodIntent.edit ? 'save' : 'create', style: TextStyle(color: Theme.of(context).primaryColor),),
+        label: Text(widget.intent == FoodIntent.add ? 'add' : {FoodIntent.edit, FoodIntent.editInDiary}.contains(widget.intent) ? 'save' : 'create', style: TextStyle(color: Theme.of(context).primaryColor),),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: () async {
           switch(widget.intent) {
@@ -401,7 +401,13 @@ class _FoodWidgetState extends State<FoodWidget> {
               widget.setstate.call();
               break;
             case FoodIntent.editInDiary:
+              FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc((widget.food as FoodEntry).diaryId.split(' ')[0]).set({
+                ((widget.food as FoodEntry).diaryId): {
+                  'amount': int.parse(multiplierCtrl.text.replaceAll('x', '')),
+                }
+              }, SetOptions(merge: true));
               widget.setstate.call();
+              Navigator.pop(context);
               break;
           }
         }

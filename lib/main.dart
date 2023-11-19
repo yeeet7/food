@@ -132,7 +132,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         ],
       ),
 
-      body: FutureBuilder<MainPageInfo>(
+      body: FutureBuilder<MainPageInfo>(//TODO: change to stream builder
         future: () async {
           DocumentSnapshot<Map> foods = await FirebaseFirestore.instance.collection(FirebaseAuth.instance.currentUser?.uid ?? '').doc('${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}').get();
           List<FoodEntry> awaitedFoods = [];

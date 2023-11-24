@@ -4,7 +4,7 @@ description: A new Flutter project.
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.10.2
+version: 0.10.3
 
 environment:
   sdk: '>=2.19.2 <3.0.0'
@@ -22,7 +22,10 @@ dependencies:
   firebase_auth: ^4.4.0
   firebase_storage: ^11.2.8
   cloud_firestore: ^4.5.0
+
   fl_chart: ^0.64.0
+  
+  flutter_native_splash: ^2.3.6
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +38,10 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon.png"
+flutter_native_splash:
+  color: "#161616"
+  image_ios: assets/icon.png
+  image_android: assets/icon.png
 
 flutter:
 

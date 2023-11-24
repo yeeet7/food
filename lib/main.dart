@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/food/add_food.dart';
 import 'package:food/start/intro.dart';
@@ -16,9 +17,11 @@ import 'package:food/start/login.dart';
 import 'dart:math' as math;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetBinding);
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  FlutterNativeSplash.remove();
   runApp(const MyApp());
 }
 

@@ -167,7 +167,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                                 animationController: AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..forward(),
                                 fgColor: Colors.orange,
                                 bgColor: Theme.of(context).colorScheme.primary,
-                                inside: Text('${(((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0).non()) * 100).round()}%'),
+                                inside: Text('${(((snapshot.data?.kcal ?? 0) / (snapshot.data?.userInfo.kcal ?? 0)).non() * 100).round()}%'),
                               ),
                             ],
                           ),

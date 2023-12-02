@@ -167,8 +167,9 @@ class FoodEntryTile extends StatelessWidget {
                         children: [
                           Text('${foodEntry.diaryAmount}${foodEntry.unit == Unit.gram ? 'g' : foodEntry.unit == Unit.milliliter ? 'ml' : 'x'} - ${foodEntry.name}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('${foodEntry.kcal}kcal  ', style: const TextStyle(fontSize: 12, color: Colors.orange)),
+                              Text('${foodEntry.diaryId.split(' ')[1].split(':').sublist(0, 2).join(':')} - ', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF6B6B6B))),                             Text('${foodEntry.kcal}kcal  ', style: const TextStyle(fontSize: 12, color: Colors.orange)),
                               Text('${foodEntry.carbs}g  ', style: TextStyle(fontSize: 12, color: Theme.of(context).primaryColor)),
                               Text('${foodEntry.proteins}g  ', style: TextStyle(fontSize: 12, color: Colors.blue.shade700)),
                               Text('${foodEntry.fats}g  ', style: TextStyle(fontSize: 12, color: Colors.green.shade800)),

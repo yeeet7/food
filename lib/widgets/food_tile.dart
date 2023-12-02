@@ -238,7 +238,7 @@ class Food {
   final String name;
   final Unit unit;
   final int amount;
-  final int kcal;
+  final num kcal;
   final num carbs;
   final num proteins;
   final num fats;

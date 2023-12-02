@@ -228,6 +228,7 @@ class Food {
     required this.name,
     required this.amount,
     required this.unit,
+    required this.notes,
     required this.kcal,
     required this.carbs,
     required this.proteins,
@@ -239,6 +240,7 @@ class Food {
   final String name;
   final Unit unit;
   final int amount;
+  final String notes;
   final num kcal;
   final num carbs;
   final num proteins;
@@ -259,6 +261,7 @@ class FoodEntry extends Food {
     required super.name,
     required super.unit,
     required super.amount,
+    required super.notes,
     required super.id,
     required super.imagePath,
     required super.kcal,
@@ -286,6 +289,7 @@ class FoodEntry extends Food {
       name: food.data()['name'],
       amount: food.data()['amount'],
       unit: Unit.values.elementAt(food.data()['unit']),
+      notes: food.data()['notes'],
       kcal: food.data()['calories'],
       carbs: food.data()['carbs'],
       proteins: food.data()['proteins'],

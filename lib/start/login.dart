@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:food/main.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:food/main.dart';
 
 final emailCtrl = TextEditingController();
 final passwordCtrl = TextEditingController();
@@ -88,9 +88,11 @@ class Login extends StatelessWidget {
               const Icon(FontAwesomeIcons.google),
               width: 40,
               onTap: () async {
-                GoogleSignInAccount? account = await googleSignIn.signIn();
-                GoogleSignInAuthentication auth = await account!.authentication;
-                await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(idToken: auth.idToken, accessToken: auth.accessToken));
+                GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
+                FirebaseAuth.instance.signInWithProvider(googleAuthProvider);
+                // GoogleSignInAccount? account = await googleSignIn.signIn();
+                // GoogleSignInAuthentication auth = await account!.authentication;
+                // await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(idToken: auth.idToken, accessToken: auth.accessToken));
               }
             ),
           ],

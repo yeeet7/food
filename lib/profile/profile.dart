@@ -277,7 +277,7 @@ class _ProfileState extends State<Profile> {
                               child: LineChart(
                                 LineChartData(
                                   minX: 0,
-                                  maxX: DateTime.now().difference(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value)).inDays.toDouble(),
+                                  maxX: userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.isNotEmpty ? DateTime.now().difference(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value)).inDays.toDouble() : 0,
                                   minY: (((userInfo.weight.values.toList().reduce((value, element) => math.min(value, element)) - 5) / 10).round() * 10),
                                   maxY: (((userInfo.weight.values.toList().reduce((value, element) => math.max(value, element))  / 10).round() * 10) + 5),
                                   lineTouchData: LineTouchData(
@@ -320,7 +320,7 @@ class _ProfileState extends State<Profile> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value).toString().split(' ')[0]),
+                                  Text(userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.isNotEmpty ? userInfo.getWeightByTime(weightGraphTimePeriodValue).keys.reduce((value, element) => element.isBefore(value) ? element : value).toString().split(' ')[0] : 'null'),
                                   const Text('Today'),
                                 ],
                               ),

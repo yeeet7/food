@@ -17,8 +17,6 @@ import 'package:food/profile/profile.dart';
 import 'package:food/start/login.dart';
 import 'dart:math' as math;
 
-//TODO: firebase is (i think) not set up with ios
-
 void main() async {
   final widgetBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetBinding);
@@ -118,7 +116,6 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: const Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         actions: [
-          IconButton(onPressed: () async {await FirebaseAuth.instance.signOut(); await GoogleSignIn().signOut();}, icon: const Icon(Icons.add)),
           Container(
             width: 40,
             height: 40,

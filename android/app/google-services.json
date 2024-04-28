@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "833836611445",
+    "project_id": "food-4de46",
+    "storage_bucket": "food-4de46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833836611445:android:5d8e891a25b9c5b50ec53c",
+        "android_client_info": {
+          "package_name": "com.yeeet.food"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833836611445-k50l12edf3kn76soc21lf40ug4apv5o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbor_MVd6b4qeNc3UWO1lacVUUH6StNqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833836611445-4a2o1mfo48hodaqusbgc5i3fudg1r3ip.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "833836611445-q79707s0md40lm2490t68ai5fjv2ljrg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yeeet.food"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833836611445:android:c5e3b5913842b1820ec53c",
+        "android_client_info": {
+          "package_name": "com.yeeet.food"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833836611445-na48hse7t735crf42a5pm1n05h2ka1g5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yeeet.food",
+            "certificate_hash": "7db85b70eb7d420ddc8a2cad78faad26d15ed5b1"
+          }
+        },
+        {
+          "client_id": "833836611445-k50l12edf3kn76soc21lf40ug4apv5o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbor_MVd6b4qeNc3UWO1lacVUUH6StNqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833836611445-4a2o1mfo48hodaqusbgc5i3fudg1r3ip.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "833836611445-q79707s0md40lm2490t68ai5fjv2ljrg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yeeet.food"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

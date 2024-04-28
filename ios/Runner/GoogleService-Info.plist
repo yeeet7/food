@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>833836611445-q79707s0md40lm2490t68ai5fjv2ljrg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.833836611445-q79707s0md40lm2490t68ai5fjv2ljrg</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>833836611445-na48hse7t735crf42a5pm1n05h2ka1g5.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBJPuqYcFvOLiUXhwBI9bg5TUptdXxdS7Q</string>
+	<key>GCM_SENDER_ID</key>
+	<string>833836611445</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.yeeet.food</string>
+	<key>PROJECT_ID</key>
+	<string>food-4de46</string>
+	<key>STORAGE_BUCKET</key>
+	<string>food-4de46.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:833836611445:ios:a36b71fd20a086630ec53c</string>
+</dict>
+</plist>

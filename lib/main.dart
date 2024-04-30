@@ -46,18 +46,24 @@ class MyApp extends StatelessWidget {
           secondary: Color(0xFFe8e8e8),
           primary: Color(0xFFffffff),
         ),
-        primaryColor: const Color(0xFFff6b6b),
-        useMaterial3: true
       ),
       darkTheme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF101010),
-        colorScheme: const ColorScheme.dark(
-          tertiary: Color(0xFF212121),
-          secondary: Color(0xFF171717),
-          primary: Color(0xFF101010),
-        ),
         primaryColor: const Color(0xFF8B0000),
-        useMaterial3: true
+        scaffoldBackgroundColor: const Color(0xFF141414),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF141414),
+          centerTitle: true,
+          elevation: 1,
+          shadowColor: Colors.black
+        ),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF141414),
+          secondary: Color(0xFF202020),
+          tertiary: Color(0xFF323232),
+          // primary: Color(0xFF101010),
+          // secondary: Color(0xFF171717),
+          // tertiary: Color(0xFF212121),
+        ),
       ),
       home: StreamBuilder(
         stream: FirebaseAuth.instance.userChanges(),
@@ -113,7 +119,6 @@ class _AppState extends State<App> with TickerProviderStateMixin {
     return Scaffold(
 
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: const Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         actions: [
           Container(
@@ -276,7 +281,7 @@ class DefaultBox extends StatelessWidget {
     this.width,
     this.height,
     this.bgColor,
-    this.shadows,
+    this.shadows = false,
     this.child,
     this.margin,
     this.padding = const EdgeInsets.all(12),
@@ -284,7 +289,7 @@ class DefaultBox extends StatelessWidget {
   });
   final Widget? child;
   final Color? bgColor;
-  final List<BoxShadow>? shadows;
+  final bool shadows;
   final double? width;
   final double? height;
   final EdgeInsets? margin;
@@ -301,7 +306,7 @@ class DefaultBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor ?? Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: shadows ?? const [
+        boxShadow: shadows ? const [
           BoxShadow(
             color: Colors.black,
             blurRadius: 15,
@@ -314,7 +319,7 @@ class DefaultBox extends StatelessWidget {
             spreadRadius: 1,
             offset: Offset(-3, -3)
           ),
-        ],
+        ]:null,
       ),
       child: child
     );

@@ -25,13 +25,13 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
 
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
+          //!might change to just settings button
           PopupMenuButton(
             color: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.more_vert_rounded, color: Colors.white,),
@@ -94,7 +94,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     child: FirebaseAuth.instance.currentUser?.photoURL != null ? 
                       Image.network(FirebaseAuth.instance.currentUser!.photoURL!) :
-                      Center(child: Text(FirebaseAuth.instance.currentUser?.displayName?[0] ?? '?')),
+                      Center(child: Text(FirebaseAuth.instance.currentUser?.displayName ?? ['?'][0])),
                   ),
                   const SizedBox(width: 24),
                   Column(
@@ -335,20 +335,20 @@ class _ProfileState extends State<Profile> {
                   DefaultBox(
                     width: MediaQuery.of(context).size.width - 48,
                     height: 40,
-                    shadows: const [
-                      BoxShadow(
-                        color: Colors.black,
-                        blurRadius: 7.5,
-                        spreadRadius: 1,
-                        offset: Offset(1.5, 1.5)
-                      ),
-                      BoxShadow(
-                        color: Color(0xFF191919),
-                        blurRadius: 7.5,
-                        spreadRadius: 1,
-                        offset: Offset(-1.5, -1.5)
-                      ),
-                    ],
+                    // shadows: const [
+                    //   BoxShadow(
+                    //     color: Colors.black,
+                    //     blurRadius: 7.5,
+                    //     spreadRadius: 1,
+                    //     offset: Offset(1.5, 1.5)
+                    //   ),
+                    //   BoxShadow(
+                    //     color: Color(0xFF191919),
+                    //     blurRadius: 7.5,
+                    //     spreadRadius: 1,
+                    //     offset: Offset(-1.5, -1.5)
+                    //   ),
+                    // ],
                     bgColor: Theme.of(context).colorScheme.primary,
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     padding: EdgeInsets.zero,
@@ -393,20 +393,20 @@ class _ProfileState extends State<Profile> {
                                       DefaultBox(
                                         width: MediaQuery.of(context).size.width / 2 - 48,
                                         height: 40,
-                                        shadows: const [
-                                          BoxShadow(
-                                            color: Colors.black,
-                                            blurRadius: 7.5,
-                                            spreadRadius: 1,
-                                            offset: Offset(1.5, 1.5)
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0xFF191919),
-                                            blurRadius: 7.5,
-                                            spreadRadius: 1,
-                                            offset: Offset(-1.5, -1.5)
-                                          ),
-                                        ],
+                                        // shadows: const [
+                                        //   BoxShadow(
+                                        //     color: Colors.black,
+                                        //     blurRadius: 7.5,
+                                        //     spreadRadius: 1,
+                                        //     offset: Offset(1.5, 1.5)
+                                        //   ),
+                                        //   BoxShadow(
+                                        //     color: Color(0xFF191919),
+                                        //     blurRadius: 7.5,
+                                        //     spreadRadius: 1,
+                                        //     offset: Offset(-1.5, -1.5)
+                                        //   ),
+                                        // ],
                                         bgColor: Theme.of(context).colorScheme.primary,
                                         margin: const EdgeInsets.symmetric(vertical: 12),
                                         padding: EdgeInsets.zero,
@@ -425,20 +425,20 @@ class _ProfileState extends State<Profile> {
                                       DefaultBox(
                                         width: MediaQuery.of(context).size.width / 2 - 48,
                                         height: 40,
-                                        shadows: const [
-                                          BoxShadow(
-                                            color: Colors.black,
-                                            blurRadius: 7.5,
-                                            spreadRadius: 1,
-                                            offset: Offset(1.5, 1.5)
-                                          ),
-                                          BoxShadow(
-                                            color: Color(0xFF191919),
-                                            blurRadius: 7.5,
-                                            spreadRadius: 1,
-                                            offset: Offset(-1.5, -1.5)
-                                          ),
-                                        ],
+                                        // shadows: const [
+                                        //   BoxShadow(
+                                        //     color: Colors.black,
+                                        //     blurRadius: 7.5,
+                                        //     spreadRadius: 1,
+                                        //     offset: Offset(1.5, 1.5)
+                                        //   ),
+                                        //   BoxShadow(
+                                        //     color: Color(0xFF191919),
+                                        //     blurRadius: 7.5,
+                                        //     spreadRadius: 1,
+                                        //     offset: Offset(-1.5, -1.5)
+                                        //   ),
+                                        // ],
                                         bgColor: Theme.of(context).colorScheme.primary,
                                         margin: const EdgeInsets.symmetric(vertical: 12),
                                         padding: EdgeInsets.zero,

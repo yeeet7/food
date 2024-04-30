@@ -120,6 +120,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
       appBar: AppBar(
         title: const Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+        leading: const IconButton(onPressed: null, icon: Icon(FontAwesomeIcons.calendarDays),),//TODO
         actions: [
           Container(
             width: 40,
@@ -155,9 +156,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           return MainPageInfo(awaitedFoods, await UserAmounts.get());
         }.call(),
         builder: (context, snapshot) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(12),
-            child: Column(
+          return RefreshIndicator.adaptive(
+            onRefresh: () async {setState(() {});},
+            child: ListView(
+              padding: const EdgeInsets.all(12),
               children: [
                 DefaultBox(
                   child: Column(
@@ -253,13 +255,13 @@ class _AppState extends State<App> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-
+          
                 const SizedBox(height: 6),
                 
                 if(snapshot.data != null) ...snapshot.data!.foods.sorted((a, b) => a.diaryId.compareTo(b.diaryId)).map(
                   (e) =>  FoodEntryTile(e, () => setState(() {}), margin: const EdgeInsets.symmetric(vertical: 6),)
                 )
-
+          
               ],
             ),
           );

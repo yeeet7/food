@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food/main.dart';
 import 'package:food/profile/settings.dart';
@@ -26,56 +27,51 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
 
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
-        flexibleSpace: ClipRect(child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: Container(color: Colors.transparent),),),
-        title: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          //!might change to just settings button
-          PopupMenuButton(
-            color: Theme.of(context).colorScheme.primary,
-            icon: const Icon(Icons.more_vert_rounded, color: Colors.white,),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            constraints: const BoxConstraints(maxWidth: 124),
-            onSelected: (value) async {
-              if(value == 0) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings()));
-              } else if(value == 1) {
-                await googleSignIn.signOut();
-                await FirebaseAuth.instance.signOut();
-                Navigator.pop(context);
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 0,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.settings_rounded),
-                    SizedBox(width: 12),
-                    Text('Settings'),
-                  ],
-                )
-              ),
-              PopupMenuItem(
-                value: 1,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.output_rounded, color: Theme.of(context).primaryColor),
-                    const SizedBox(width: 12),
-                    Text('Sign out', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
-                  ],
-                )
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+        middle: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
+        leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, previousPageTitle: 'Back', onPressed: () => Navigator.pop(context),),
+
+        //!might change to just settings button
+        trailing: PopupMenuButton(
+          color: Theme.of(context).colorScheme.primary,
+          icon: const Icon(Icons.more_vert_rounded, color: Colors.white,),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          constraints: const BoxConstraints(maxWidth: 124),
+          onSelected: (value) async {
+            if(value == 0) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings()));
+            } else if(value == 1) {
+              await googleSignIn.signOut();
+              await FirebaseAuth.instance.signOut();
+              Navigator.pop(context);
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 0,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.settings_rounded),
+                  SizedBox(width: 12),
+                  Text('Settings'),
+                ],
               )
-            ]
-          )
-        ],
+            ),
+            PopupMenuItem(
+              value: 1,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.output_rounded, color: Theme.of(context).primaryColor),
+                  const SizedBox(width: 12),
+                  Text('Sign out', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
+                ],
+              )
+            )
+          ]
+        )
       ),
 
       body: SingleChildScrollView(

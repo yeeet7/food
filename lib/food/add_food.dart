@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food/food/food.dart';
 import 'package:food/widgets/food_tile.dart';
@@ -27,14 +28,12 @@ class _AddFoodState extends State<AddFood> {
         return StatefulBuilder(
           builder: (context, setstate) {
             return Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                title: TextField(
+
+              extendBodyBehindAppBar: true,
+              appBar: CupertinoNavigationBar(
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+                leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, onPressed: () => Navigator.pop(context),),
+                middle: TextField(
                   controller: addFoodController,
                   cursorColor: Colors.white54,
                   focusNode: addFoodNode,
@@ -56,18 +55,17 @@ class _AddFoodState extends State<AddFood> {
                     ),
                   ),
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
-                  )
-                ],
+                trailing: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
+                )
               ),
       
-              body: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: snapshot.data?.docs.where((element) => (element.data()['name'] as String).contains(addFoodController.text)).map<Widget>(
+              body: ListView(
+                shrinkWrap: true,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).padding.top),
+                  ...snapshot.data?.docs.where((element) => (element.data()['name'] as String).contains(addFoodController.text)).map<Widget>(
                     (e) => FoodTile(
                       Food(
                         id: e.id,
@@ -84,8 +82,8 @@ class _AddFoodState extends State<AddFood> {
                       setstate: () {widget.setstate.call(); setState(() {});},
                     )
                   ).toList() ?? [],
-                  ///TODO: #1
-                ),
+                ]
+                ///TODO: #1
               )
       
             );

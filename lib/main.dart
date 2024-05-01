@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -118,30 +119,30 @@ class _AppState extends State<App> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(
-        title: const Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+      extendBodyBehindAppBar: true,
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
         leading: const IconButton(onPressed: null, icon: Icon(FontAwesomeIcons.calendarDays),),//TODO
-        actions: [
-          Container(
-            width: 40,
-            height: 40,
-            margin: const EdgeInsets.all(15/2),
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(80)
-            ),
-            child: Material(
-              borderRadius: BorderRadius.circular(80),
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(80),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile())),
-                child: FirebaseAuth.instance.currentUser?.photoURL != null ? Image.network(FirebaseAuth.instance.currentUser!.photoURL!) : null
-              )
-            )
+        middle: Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
+        trailing: Container(
+          width: 40,
+          height: 40,
+          margin: const EdgeInsets.all(15/2),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(80)
           ),
-        ],
+          child: Material(
+            borderRadius: BorderRadius.circular(80),
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(80),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile())),
+              child: FirebaseAuth.instance.currentUser?.photoURL != null ? Image.network(FirebaseAuth.instance.currentUser!.photoURL!) : null
+            )
+          )
+        ),
       ),
 
       body: FutureBuilder<MainPageInfo>(//TODO: change to stream builder
@@ -161,6 +162,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             child: ListView(
               padding: const EdgeInsets.all(12),
               children: [
+
+                // SizedBox(height: MediaQuery.of(context).padding.top + 56),
+                SizedBox(height: MediaQuery.of(context).padding.top),
+
                 DefaultBox(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

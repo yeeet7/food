@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/widgets/food_tile.dart';
@@ -65,12 +66,20 @@ class _FoodWidgetState extends State<FoodWidget> {
 
     return Scaffold(
 
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => Navigator.pop(context),
-        ),
+      extendBodyBehindAppBar: true,
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+        leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, onPressed: () => Navigator.pop(context),),
+        middle: {FoodIntent.edit, FoodIntent.create}.contains(widget.intent) != true ? FittedBox(
+          child: Text(
+            widget.food?.name ?? "name",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.white70
+            ),
+          )
+        ):null,
       ),
 
       body: SingleChildScrollView(
@@ -80,6 +89,8 @@ class _FoodWidgetState extends State<FoodWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               
+              SizedBox(height: MediaQuery.of(context).padding.top + 56),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -193,16 +204,16 @@ class _FoodWidgetState extends State<FoodWidget> {
                 ],
               ),
 
-              if (!{FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) FittedBox(
-                child: Text(
-                  widget.food?.name ?? "name",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white70
-                  ),
-                )
-              ),
+              // if (!{FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) FittedBox(
+              //   child: Text(
+              //     widget.food?.name ?? "name",
+              //     style: const TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 20,
+              //       color: Colors.white70
+              //     ),
+              //   )
+              // ),
 
               if({FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) const SizedBox(height: 12),
 

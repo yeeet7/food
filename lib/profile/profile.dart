@@ -2,6 +2,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math' as math;
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -24,7 +25,10 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
 
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
+        flexibleSpace: ClipRect(child: BackdropFilter(filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10), child: Container(color: Colors.transparent),),),
         title: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -78,6 +82,8 @@ class _ProfileState extends State<Profile> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
+
+            SizedBox(height: MediaQuery.of(context).padding.top + 56),
             
             /// profile
             Container(
@@ -450,7 +456,7 @@ class _ProfileState extends State<Profile> {
                                               await firestore.FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).set(
                                                 {
                                                   'weight': {
-                                                    DateTime.now().toString().split(' ')[0]: double.parse(weightValueCtrl.text)
+                                                    DateTime.now().toString().split(' ')[0]: double.parse(weightValueCtrl.text.replaceAll(',', '.'))
                                                   }
                                                 },
                                                 firestore.SetOptions(merge: true),

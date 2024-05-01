@@ -374,7 +374,7 @@ class _ProfileState extends State<Profile> {
                                   TextField(
                                     controller: weightValueCtrl,
                                     textAlign: TextAlign.center,
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: false),
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -468,6 +468,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             )
                           ).then((value) {weightValueCtrl.clear(); setState(() {});});
+
                         },
                         child: const Padding(
                           padding: EdgeInsets.only(left: 12, right: 6),

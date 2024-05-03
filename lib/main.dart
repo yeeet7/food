@@ -130,14 +130,12 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           margin: const EdgeInsets.all(15/2),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
+            shape: BoxShape.circle,
             color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(80)
           ),
           child: Material(
-            borderRadius: BorderRadius.circular(80),
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(80),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile())),
               child: FirebaseAuth.instance.currentUser?.photoURL != null ? Image.network(FirebaseAuth.instance.currentUser!.photoURL!) : null
             )

@@ -55,10 +55,10 @@ class _AddFoodState extends State<AddFood> {
                     ),
                   ),
                 ),
-                trailing: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
-                )
+                // trailing: IconButton(
+                //   icon: const Icon(Icons.add),
+                //   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
+                // )
               ),
       
               body: ListView(
@@ -84,8 +84,13 @@ class _AddFoodState extends State<AddFood> {
                   ).toList() ?? [],
                 ]
                 ///TODO: #1
-              )
+              ),
       
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {}))))
+              ),
+
             );
           }
         );

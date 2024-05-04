@@ -134,7 +134,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
             color: Colors.transparent,
             child: InkWell(
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile())),
-              child: FirebaseAuth.instance.currentUser?.photoURL != null ? Image.network(FirebaseAuth.instance.currentUser!.photoURL!) : null
+              child: FirebaseAuth.instance.currentUser?.photoURL != null ? Image.network(FirebaseAuth.instance.currentUser!.photoURL!, fit: BoxFit.cover,) : null
             )
           )
         ),
@@ -153,6 +153,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         }.call(),
         builder: (context, snapshot) {
           return RefreshIndicator.adaptive(
+            color: Theme.of(context).colorScheme.secondary,
             onRefresh: () async {setState(() {});},
             child: ListView(
               padding: const EdgeInsets.all(12),

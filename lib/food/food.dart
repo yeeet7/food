@@ -82,402 +82,396 @@ class _FoodWidgetState extends State<FoodWidget> {
         ):null,
       ),
 
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              
-              SizedBox(height: MediaQuery.of(context).padding.top + 56),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * .4,
-                    height: MediaQuery.of(context).size.width * .4,
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(24)
-                    ),
-                    child: () {
-                      if({FoodIntent.create, FoodIntent.edit}.contains(widget.intent)) {
-                        if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
-                        return tempImageFile ?
-                          Image.file(File(tempImage!), fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4,):
-                          Image.network(tempImage!, fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4,);
-                      } else {
-                        if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
-                        return Image.network(tempImage!, fit: BoxFit.cover, height: MediaQuery.of(context).size.width * .4, width: MediaQuery.of(context).size.width * .4);
-                      }
-                    }.call(),
+      body: Container(
+        margin: const EdgeInsets.all(12),
+        child: ListView(
+          children: [      
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(24)
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .4,
-                    height: MediaQuery.of(context).size.width * .4,
-                    child: {FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent) ? Wrap(
-                      runAlignment: WrapAlignment.spaceEvenly,
-                      alignment: WrapAlignment.spaceEvenly,
-                      children: List.generate(
-                        4,
-                        (index) => SizedBox(
-                          width: MediaQuery.of(context).size.width * .2,
-                          child: Column(
-                            children: [
-                              Text(index == 0 ? '${widget.food?.kcal ?? '0'}' : index == 1 ? '${widget.food?.carbs ?? 0}g' : index == 2 ? '${widget.food?.proteins ?? 0}g' : '${widget.food?.fats ?? 0}g', style: TextStyle(color: index == 0 ? Colors.orange : index == 1 ? Theme.of(context).primaryColor : index == 2 ? Colors.blue.shade700 : Colors.green.shade800, fontWeight: FontWeight.bold, fontSize: 18),),
-                              Text(index == 0 ? 'Calories' : index == 1 ? 'Carbs' : index == 2 ? 'Proteins' : 'Fats', style: const TextStyle(color: Colors.white30, fontWeight: FontWeight.bold),)
-                            ],
-                          ),
-                        )
+                  child: () {
+                    if({FoodIntent.create, FoodIntent.edit}.contains(widget.intent)) {
+                      if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
+                      return tempImageFile ?
+                        Image.file(File(tempImage!), fit: BoxFit.cover, height: (MediaQuery.of(context).size.width - 24 - 12) / 2, width: (MediaQuery.of(context).size.width - 24 - 12) / 2,):
+                        Image.network(tempImage!, fit: BoxFit.cover, height: (MediaQuery.of(context).size.width - 24 - 12) / 2, width: (MediaQuery.of(context).size.width - 24 - 12) / 2,);
+                    } else {
+                      if(tempImage == null) return Icon(FontAwesomeIcons.appleWhole, size: MediaQuery.of(context).size.width * .2, color: Theme.of(context).primaryColor);
+                      return Image.network(tempImage!, fit: BoxFit.cover, height: (MediaQuery.of(context).size.width - 24 - 12) / 2, width: (MediaQuery.of(context).size.width - 24 - 12) / 2);
+                    }
+                  }.call(),
+                ),
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  child: {FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent) ? Wrap(
+                    runAlignment: WrapAlignment.spaceEvenly,
+                    alignment: WrapAlignment.spaceEvenly,
+                    children: List.generate(
+                      4,
+                      (index) => SizedBox(
+                        width: MediaQuery.of(context).size.width * .2,
+                        child: Column(
+                          children: [
+                            Text(index == 0 ? '${widget.food?.kcal ?? '0'}' : index == 1 ? '${widget.food?.carbs ?? 0}g' : index == 2 ? '${widget.food?.proteins ?? 0}g' : '${widget.food?.fats ?? 0}g', style: TextStyle(color: index == 0 ? Colors.orange : index == 1 ? Theme.of(context).primaryColor : index == 2 ? Colors.blue.shade700 : Colors.green.shade800, fontWeight: FontWeight.bold, fontSize: 18),),
+                            Text(index == 0 ? 'Calories' : index == 1 ? 'Carbs' : index == 2 ? 'Proteins' : 'Fats', style: const TextStyle(color: Colors.white30, fontWeight: FontWeight.bold),)
+                          ],
+                        ),
                       )
-                    ) : Wrap(
-                      runAlignment: WrapAlignment.spaceEvenly,
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: List.generate(
-                        3,
-                        (index) => SizedBox(
-                          width: MediaQuery.of(context).size.width * .2,
-                          child: IconButton(
-                            icon: Icon(index == 0 ? FontAwesomeIcons.cameraRetro : index == 1 ? FontAwesomeIcons.image : FontAwesomeIcons.trash, color: Colors.white38),
-                            onPressed: 
-                              index == 0 ? () async {
-                              tempImage = (await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 25))?.path;
-                              setState(() {tempImageFile = true;});
-                            } : index == 1 ? () async {
-                              tempImage = (await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 25))?.path;
-                              setState(() {tempImageFile = true;});
-                            } : () => setState(() {tempImage = null; tempImageFile = true;})
-                          ),
-                        )
+                    )
+                  ) : Wrap(
+                    runAlignment: WrapAlignment.spaceEvenly,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: List.generate(
+                      3,
+                      (index) => SizedBox(
+                        width: MediaQuery.of(context).size.width * .2,
+                        child: IconButton(
+                          icon: Icon(index == 0 ? FontAwesomeIcons.cameraRetro : index == 1 ? FontAwesomeIcons.image : FontAwesomeIcons.trash, color: Colors.white38),
+                          onPressed: 
+                            index == 0 ? () async {
+                            tempImage = (await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 25))?.path;
+                            setState(() {tempImageFile = true;});
+                          } : index == 1 ? () async {
+                            tempImage = (await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 25))?.path;
+                            setState(() {tempImageFile = true;});
+                          } : () => setState(() {tempImage = null; tempImageFile = true;})
+                        ),
                       )
-                    ),
+                    )
                   ),
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              if({FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                    child:  TextField(
-                      enabled: true,
-                      onTapOutside: (event) => nameNode.unfocus(),
-                      controller: nameCtrl,
-                      focusNode: nameNode,
-                      cursorColor: Colors.white70,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
+                ),
+              ],
+            ),
+      
+            const SizedBox(height: 12),
+      
+            if({FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: 58,
+                  child:  TextField(
+                    enabled: true,
+                    onTapOutside: (event) => nameNode.unfocus(),
+                    controller: nameCtrl,
+                    focusNode: nameNode,
+                    cursorColor: Colors.white70,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                    height: 58,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child: const Text('Name'),
-                  )
-                ],
-              ),
-
-              if({FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) const SizedBox(height: 12),
-
-              if({FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                    child: TextField(
-                      enabled: widget.intent != FoodIntent.view,
-                      onTapOutside: (event) {
-                        if(multiplierNode.hasFocus && unit == Unit.portion) {
-                          multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
-                        }
-                        multiplierNode.unfocus();
-                      },
-                      onSubmitted: (value) {
-                        if(multiplierNode.hasFocus && unit == Unit.portion) {
-                          multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
-                        }
-                        multiplierNode.unfocus();
-                      },
-                      onTap: () {multiplierNode.requestFocus(); if(unit == Unit.portion) multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');},
-                      controller: multiplierCtrl,
-                      focusNode: multiplierNode,
-                      cursorColor: Colors.white70,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
                       ),
-                    ),
-                  ),
-                  Container(
-                    width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                    height: 58,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child: {FoodIntent.create, FoodIntent.edit}.contains(widget.intent) ? DropdownButtonFormField(
-                      value: unit.index,
-                      alignment: Alignment.center,
-                      borderRadius: BorderRadius.circular(12),
-                      dropdownColor: Theme.of(context).colorScheme.secondary,
-                      icon: Transform.rotate(angle: math.pi*-.5, child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16,)),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical:4),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0)
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0)
-                        ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
                       ),
-                      items: const [
-                        DropdownMenuItem(value: 0, child: Text('grams')),
-                        DropdownMenuItem(value: 1, child: Text('milliliters')),
-                        DropdownMenuItem(value: 2, child: Text('portions')),
-                      ],
-                      onChanged: {FoodIntent.view, FoodIntent.add}.contains(widget.intent) ? null : (value) => setState(() {
-                        unit = Unit.values.elementAt(value as int);
-                        if(unit == Unit.portion) {
-                          multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text.replaceAll('x', '')}x';
-                        } else {
-                          multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');
-                        }
-                      })
-                    ) : Text(unit.name),
-                  )
-                ],
-              ),
-
-              const SizedBox(height: 12),
-
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 48 - 10,
-                child: TextField(
-                  enabled: !{FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent),
-                  onTapOutside: (event) => notesNode.unfocus(),
-                  onSubmitted: (value) => notesNode.unfocus(),
-                  onTap: () => notesNode.requestFocus(),
-                  controller: notesCtrl,
-                  focusNode: notesNode,
-                  cursorColor: Colors.white70,
-                  textAlign: TextAlign.center,
-                  minLines: 3,
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Theme.of(context).colorScheme.secondary,
-                    label: const Center(child: Text('Notes', style: TextStyle(color: Colors.white),)),
-                    floatingLabelAlignment: FloatingLabelAlignment.center,
-                    alignLabelWithHint: true,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.transparent)
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.transparent)
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(color: Colors.transparent)
                     ),
                   ),
                 ),
-              ),
-            
-              if ({FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) const SizedBox(height: 12),
-
-              if ({FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Nutrition information per:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white30),),
-                ],
-              ),
-
-              if(!{FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) const SizedBox(height: 12),
-
-              if(!{FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                    child: TextField(
-                      enabled: widget.intent != FoodIntent.view,
-                      onTapOutside: (event) {
-                        if(multiplierNode.hasFocus && unit == Unit.portion) {
-                          multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
-                        }
-                        multiplierNode.unfocus();
-                      },
-                      onSubmitted: (value) {
-                        if(multiplierNode.hasFocus && unit == Unit.portion) {
-                          multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
-                        }
-                        multiplierNode.unfocus();
-                      },
-                      onTap: () {multiplierNode.requestFocus(); if(unit == Unit.portion) multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');},
-                      controller: multiplierCtrl,
-                      focusNode: multiplierNode,
-                      cursorColor: Colors.white70,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent)
-                        ),
+                Container(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: 58,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  child: const Text('Name'),
+                )
+              ],
+            ),
+      
+            if({FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) const SizedBox(height: 12),
+      
+            if({FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: 58,
+                  child: TextField(
+                    enabled: widget.intent != FoodIntent.view,
+                    onTapOutside: (event) {
+                      if(multiplierNode.hasFocus && unit == Unit.portion) {
+                        multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
+                      }
+                      multiplierNode.unfocus();
+                    },
+                    onSubmitted: (value) {
+                      if(multiplierNode.hasFocus && unit == Unit.portion) {
+                        multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
+                      }
+                      multiplierNode.unfocus();
+                    },
+                    onTap: () {multiplierNode.requestFocus(); if(unit == Unit.portion) multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');},
+                    controller: multiplierCtrl,
+                    focusNode: multiplierNode,
+                    cursorColor: Colors.white70,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
                       ),
                     ),
                   ),
-                  Container(
-                    width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                    height: 58,
+                ),
+                Container(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: 58,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  child: {FoodIntent.create, FoodIntent.edit}.contains(widget.intent) ? DropdownButtonFormField(
+                    value: unit.index,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child: {FoodIntent.create, FoodIntent.edit}.contains(widget.intent) ? DropdownButtonFormField(
-                      value: unit.index,
-                      alignment: Alignment.center,
-                      borderRadius: BorderRadius.circular(12),
-                      dropdownColor: Theme.of(context).colorScheme.secondary,
-                      icon: Transform.rotate(angle: math.pi*-.5, child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16,)),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical:4),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0)
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: Colors.transparent, width: 0)
-                        ),
+                    borderRadius: BorderRadius.circular(12),
+                    dropdownColor: Theme.of(context).colorScheme.secondary,
+                    icon: Transform.rotate(angle: math.pi*-.5, child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16,)),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical:4),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent, width: 0)
                       ),
-                      items: const [
-                        DropdownMenuItem(value: 0, child: Text('grams')),
-                        DropdownMenuItem(value: 1, child: Text('milliliters')),
-                        DropdownMenuItem(value: 2, child: Text('portions')),
-                      ],
-                      onChanged: {FoodIntent.view, FoodIntent.add}.contains(widget.intent) ? null : (value) => setState(() {
-                        unit = Unit.values.elementAt(value as int);
-                        if(unit == Unit.portion) {
-                          multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text.replaceAll('x', '')}x';
-                        } else {
-                          multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');
-                        }
-                      })
-                    ) : Text(unit.name),
-                  )
-                ],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent, width: 0)
+                      ),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 0, child: Text('grams')),
+                      DropdownMenuItem(value: 1, child: Text('milliliters')),
+                      DropdownMenuItem(value: 2, child: Text('portions')),
+                    ],
+                    onChanged: {FoodIntent.view, FoodIntent.add}.contains(widget.intent) ? null : (value) => setState(() {
+                      unit = Unit.values.elementAt(value as int);
+                      if(unit == Unit.portion) {
+                        multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text.replaceAll('x', '')}x';
+                      } else {
+                        multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');
+                      }
+                    })
+                  ) : Text(unit.name),
+                )
+              ],
+            ),
+      
+            const SizedBox(height: 12),
+      
+            TextField(
+              enabled: !{FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent),
+              onTapOutside: (event) => notesNode.unfocus(),
+              onSubmitted: (value) => notesNode.unfocus(),
+              onTap: () => notesNode.requestFocus(),
+              controller: notesCtrl,
+              focusNode: notesNode,
+              cursorColor: Colors.white70,
+              textAlign: TextAlign.center,
+              minLines: 5,
+              maxLines: null,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.secondary,
+                label: const Center(child: Text('Notes', style: TextStyle(color: Colors.white),)),
+                floatingLabelAlignment: FloatingLabelAlignment.center,
+                alignLabelWithHint: true,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Colors.transparent)
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Colors.transparent)
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Colors.transparent)
+                ),
               ),
-
-              if({FoodIntent.create, FoodIntent.edit}.contains(widget.intent)) ...List.generate(
-                4,
-                (index) => Container(
-                  margin: const EdgeInsets.only(top: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                        child: TextField(
-                          onTapOutside: (event) => multiplierNode.unfocus(),
-                          controller: [kcalCtrl, carbsCtrl, proteinsCtrl, fatsCtrl][index],
-                          focusNode: [kcalNode, carbsNode, proteinsNode, fatsNode][index],
-                          cursorColor: Colors.white70,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Theme.of(context).colorScheme.secondary,
-                            suffix: Text(['kcal', 'g', 'g', 'g'][index], style: const TextStyle(color: Colors.white30),),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: Colors.transparent)
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(color: Colors.transparent)
-                            ),
+            ),
+          
+            if ({FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) const SizedBox(height: 12),
+      
+            if ({FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Nutrition information per:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white30),),
+              ],
+            ),
+      
+            if(!{FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) const SizedBox(height: 12),
+      
+            if(!{FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: 58,
+                  child: TextField(
+                    enabled: widget.intent != FoodIntent.view,
+                    onTapOutside: (event) {
+                      if(multiplierNode.hasFocus && unit == Unit.portion) {
+                        multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
+                      }
+                      multiplierNode.unfocus();
+                    },
+                    onSubmitted: (value) {
+                      if(multiplierNode.hasFocus && unit == Unit.portion) {
+                        multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text}x';
+                      }
+                      multiplierNode.unfocus();
+                    },
+                    onTap: () {multiplierNode.requestFocus(); if(unit == Unit.portion) multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');},
+                    controller: multiplierCtrl,
+                    focusNode: multiplierNode,
+                    cursorColor: Colors.white70,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent)
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                  height: 58,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(12)
+                  ),
+                  child: {FoodIntent.create, FoodIntent.edit}.contains(widget.intent) ? DropdownButtonFormField(
+                    value: unit.index,
+                    alignment: Alignment.center,
+                    borderRadius: BorderRadius.circular(12),
+                    dropdownColor: Theme.of(context).colorScheme.secondary,
+                    icon: Transform.rotate(angle: math.pi*-.5, child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16,)),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.secondary,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical:4),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent, width: 0)
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.transparent, width: 0)
+                      ),
+                    ),
+                    items: const [
+                      DropdownMenuItem(value: 0, child: Text('grams')),
+                      DropdownMenuItem(value: 1, child: Text('milliliters')),
+                      DropdownMenuItem(value: 2, child: Text('portions')),
+                    ],
+                    onChanged: {FoodIntent.view, FoodIntent.add}.contains(widget.intent) ? null : (value) => setState(() {
+                      unit = Unit.values.elementAt(value as int);
+                      if(unit == Unit.portion) {
+                        multiplierCtrl.text = '${multiplierCtrl.text.replaceAll('x', '') == '' ? '1' : multiplierCtrl.text.replaceAll('x', '')}x';
+                      } else {
+                        multiplierCtrl.text = multiplierCtrl.text.replaceAll('x', '');
+                      }
+                    })
+                  ) : Text(unit.name),
+                )
+              ],
+            ),
+      
+            if({FoodIntent.create, FoodIntent.edit}.contains(widget.intent)) ...List.generate(
+              4,
+              (index) => Container(
+                margin: const EdgeInsets.only(top: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                      height: 58,
+                      child: TextField(
+                        onTapOutside: (event) => multiplierNode.unfocus(),
+                        controller: [kcalCtrl, carbsCtrl, proteinsCtrl, fatsCtrl][index],
+                        focusNode: [kcalNode, carbsNode, proteinsNode, fatsNode][index],
+                        cursorColor: Colors.white70,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.secondary,
+                          suffix: Text(['kcal', 'g', 'g', 'g'][index], style: const TextStyle(color: Colors.white30),),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.transparent)
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.transparent)
                           ),
                         ),
                       ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width - 48 - 24) / 2,
-                        height: 58,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.secondary,
-                          borderRadius: BorderRadius.circular(12)
-                        ),
-                        child: Text(['Calories', 'Carbohydrates', 'Proteins', 'Fats'][index]),
-                      )
-                    ],
-                  ),
-                )
+                    ),
+                    Container(
+                      width: (MediaQuery.of(context).size.width - 24 - 12) / 2,
+                      height: 58,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Text(['Calories', 'Carbohydrates', 'Proteins', 'Fats'][index]),
+                    )
+                  ],
+                ),
               )
-        
-            ],
-          ),
+            )
+          ],
         ),
       ),
 

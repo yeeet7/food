@@ -2,7 +2,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -74,13 +73,11 @@ class _ProfileState extends State<Profile> {
         )
       ),
 
-      body: SingleChildScrollView(
+      body: Container(
+        color: Colors.transparent,
         padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-
-            SizedBox(height: MediaQuery.of(context).padding.top + 56),
-            
+        child: ListView(
+          children: [            
             /// profile
             Container(
               margin: const EdgeInsets.symmetric(vertical: 12),
@@ -92,10 +89,10 @@ class _ProfileState extends State<Profile> {
                     height: MediaQuery.of(context).size.width * .25,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(200)
+                      shape: BoxShape.circle
                     ),
                     child: FirebaseAuth.instance.currentUser?.photoURL != null ? 
-                      Image.network(FirebaseAuth.instance.currentUser!.photoURL!) :
+                      Image.network(FirebaseAuth.instance.currentUser!.photoURL!, fit: BoxFit.cover,) :
                       Center(child: Text(FirebaseAuth.instance.currentUser?.displayName ?? ['?'][0])),
                   ),
                   const SizedBox(width: 24),

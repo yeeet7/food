@@ -279,8 +279,8 @@ class FoodEntry extends Food {
   int get calculateFats => (fats/amount*diaryAmount).round();
 
   static Future<FoodEntry> fromDiary(String id, int amount, String diaryId) async {
-    QuerySnapshot<Map<String, dynamic>> all = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get();
-    QueryDocumentSnapshot<Map<String, dynamic>> food = all.docs.where((e) => e.id == id).first;
+    QuerySnapshot<Map<String, dynamic>> allFoods = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).collection('foods').get();
+    QueryDocumentSnapshot<Map<String, dynamic>> food = allFoods.docs.where((e) => e.id == id).first;
     return FoodEntry._(
       id: id,
       diaryId: diaryId,
@@ -295,6 +295,10 @@ class FoodEntry extends Food {
       proteins: food.data()['proteins'],
       fats: food.data()['fats'],
     );
+  }
+
+  @override toString() {
+    return 'FoodEntry(name: $name, diaryId: $diaryId, id: $id)';
   }
 
 }

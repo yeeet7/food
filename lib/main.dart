@@ -72,17 +72,16 @@ class MyApp extends StatelessWidget {
             return StreamBuilder(
               stream: FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
               builder: (context, snap) {
-                if(
-                  snap.data == null ||
-                  (snap.data?.data()?['calories'] != null &&
+
+                /// if values in database are null -> get them from the user / otherwise -> get the from the database and store them locally
+                if(snap.data?.data()?['calories'] != null &&
                   snap.data?.data()?['carbs'] != null &&
                   snap.data?.data()?['proteins'] != null &&
                   snap.data?.data()?['fats'] != null &&
                   snap.data?.data()?['height'] != null &&
-                  snap.data?.data()?['weight'] != null)
+                  snap.data?.data()?['weight'] != null                  
                 ) {
-                  if(snap.data != null) {
-                    userInfo = UserAmounts._(
+                  userInfo = UserAmounts._init_(
                       snap.data!.data()!['height'],
                       (snap.data!.data()!['weight'] as Map<String, dynamic>).cast<String, num>().map((key, value) => MapEntry(DateTime.parse(key), value)),
                       snap.data!.data()!['calories'],
@@ -90,7 +89,6 @@ class MyApp extends StatelessWidget {
                       snap.data!.data()!['proteins'],
                       snap.data!.data()!['fats'],
                     );
-                  }
                   return const App();
                 } else {
                   return const Intro();
@@ -146,10 +144,10 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           List<FoodEntry> awaitedFoods = [];
           for (int food = 0; food < (foods.data()?.entries.length ?? 0); food++) {
             var currentFood = foods.data()?.entries.toList()[food];
-            FoodEntry foodEntry = await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount'], currentFood?.key);
+            FoodEntry foodEntry = await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount'], currentFood?.key); //TODO! this is the problem (only if there is food in diary)
             awaitedFoods.add(foodEntry);
           }
-          return MainPageInfo(awaitedFoods, await UserAmounts.get());
+          return MainPageInfo(awaitedFoods, userInfo);
         }.call(),
         builder: (context, snapshot) {
           return RefreshIndicator.adaptive(
@@ -372,7 +370,7 @@ class MainPageInfo {
 
 class UserAmounts {
 
-  UserAmounts._(
+  UserAmounts._init_(
     this.height,
     this.weight,
     this.kcal,
@@ -383,7 +381,7 @@ class UserAmounts {
 
   static Future<UserAmounts> get() async {
     DocumentSnapshot<Map> doc = await FirebaseFirestore.instance.collection('config').doc(FirebaseAuth.instance.currentUser?.uid).get();
-    return UserAmounts._(
+    return UserAmounts._init_(
       doc.data()?['height'] ?? 0,
       (doc.data()?['weight'] as Map<String, dynamic>?)?.cast<String, num>().map((key, value) => MapEntry(DateTime.parse(key), value)) ?? <DateTime, num>{},
       doc.data()?['calories'] ?? 0,

@@ -78,7 +78,6 @@ class _AddFoodState extends State<AddFood> {
                     )
                   ).toList() ?? [],
                 ]
-                ///TODO: #1
               ),
       
               floatingActionButton: FloatingActionButton(

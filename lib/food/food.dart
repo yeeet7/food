@@ -68,7 +68,7 @@ class _FoodWidgetState extends State<FoodWidget> {
 
       extendBodyBehindAppBar: true,
       appBar: CupertinoNavigationBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
         leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, onPressed: () => Navigator.pop(context),),
         middle: {FoodIntent.edit, FoodIntent.create}.contains(widget.intent) != true ? FittedBox(
           child: Text(
@@ -203,17 +203,6 @@ class _FoodWidgetState extends State<FoodWidget> {
                   )
                 ],
               ),
-
-              // if (!{FoodIntent.edit, FoodIntent.create}.contains(widget.intent)) FittedBox(
-              //   child: Text(
-              //     widget.food?.name ?? "name",
-              //     style: const TextStyle(
-              //       fontWeight: FontWeight.bold,
-              //       fontSize: 20,
-              //       color: Colors.white70
-              //     ),
-              //   )
-              // ),
 
               if({FoodIntent.view, FoodIntent.add, FoodIntent.editInDiary}.contains(widget.intent)) const SizedBox(height: 12),
 

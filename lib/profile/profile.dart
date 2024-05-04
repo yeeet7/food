@@ -28,7 +28,7 @@ class _ProfileState extends State<Profile> {
 
       extendBodyBehindAppBar: true,
       appBar: CupertinoNavigationBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
         middle: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
         leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, previousPageTitle: 'Back', onPressed: () => Navigator.pop(context),),
 
@@ -182,7 +182,6 @@ class _ProfileState extends State<Profile> {
             
             DefaultBox(
               width: MediaQuery.of(context).size.width - 24,
-              // height: MediaQuery.of(context).size.width - 24,
               margin: const EdgeInsets.symmetric(vertical: 12),
               child: Column(
                 children: [
@@ -337,20 +336,6 @@ class _ProfileState extends State<Profile> {
                   DefaultBox(
                     width: MediaQuery.of(context).size.width - 48,
                     height: 40,
-                    // shadows: const [
-                    //   BoxShadow(
-                    //     color: Colors.black,
-                    //     blurRadius: 7.5,
-                    //     spreadRadius: 1,
-                    //     offset: Offset(1.5, 1.5)
-                    //   ),
-                    //   BoxShadow(
-                    //     color: Color(0xFF191919),
-                    //     blurRadius: 7.5,
-                    //     spreadRadius: 1,
-                    //     offset: Offset(-1.5, -1.5)
-                    //   ),
-                    // ],
                     bgColor: Theme.of(context).colorScheme.primary,
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     padding: EdgeInsets.zero,
@@ -395,20 +380,6 @@ class _ProfileState extends State<Profile> {
                                       DefaultBox(
                                         width: MediaQuery.of(context).size.width / 2 - 48,
                                         height: 40,
-                                        // shadows: const [
-                                        //   BoxShadow(
-                                        //     color: Colors.black,
-                                        //     blurRadius: 7.5,
-                                        //     spreadRadius: 1,
-                                        //     offset: Offset(1.5, 1.5)
-                                        //   ),
-                                        //   BoxShadow(
-                                        //     color: Color(0xFF191919),
-                                        //     blurRadius: 7.5,
-                                        //     spreadRadius: 1,
-                                        //     offset: Offset(-1.5, -1.5)
-                                        //   ),
-                                        // ],
                                         bgColor: Theme.of(context).colorScheme.primary,
                                         margin: const EdgeInsets.symmetric(vertical: 12),
                                         padding: EdgeInsets.zero,
@@ -427,20 +398,6 @@ class _ProfileState extends State<Profile> {
                                       DefaultBox(
                                         width: MediaQuery.of(context).size.width / 2 - 48,
                                         height: 40,
-                                        // shadows: const [
-                                        //   BoxShadow(
-                                        //     color: Colors.black,
-                                        //     blurRadius: 7.5,
-                                        //     spreadRadius: 1,
-                                        //     offset: Offset(1.5, 1.5)
-                                        //   ),
-                                        //   BoxShadow(
-                                        //     color: Color(0xFF191919),
-                                        //     blurRadius: 7.5,
-                                        //     spreadRadius: 1,
-                                        //     offset: Offset(-1.5, -1.5)
-                                        //   ),
-                                        // ],
                                         bgColor: Theme.of(context).colorScheme.primary,
                                         margin: const EdgeInsets.symmetric(vertical: 12),
                                         padding: EdgeInsets.zero,

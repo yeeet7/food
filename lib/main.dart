@@ -61,9 +61,6 @@ class MyApp extends StatelessWidget {
           primary: Color(0xFF141414),
           secondary: Color(0xFF202020),
           tertiary: Color(0xFF323232),
-          // primary: Color(0xFF101010),
-          // secondary: Color(0xFF171717),
-          // tertiary: Color(0xFF212121),
         ),
       ),
       home: StreamBuilder(
@@ -121,7 +118,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
 
       extendBodyBehindAppBar: true,
       appBar: CupertinoNavigationBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
         leading: const IconButton(onPressed: null, icon: Icon(FontAwesomeIcons.calendarDays),),//TODO
         middle: Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
         trailing: Container(
@@ -161,7 +158,6 @@ class _AppState extends State<App> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(12),
               children: [
 
-                // SizedBox(height: MediaQuery.of(context).padding.top + 56),
                 SizedBox(height: MediaQuery.of(context).padding.top),
 
                 DefaultBox(

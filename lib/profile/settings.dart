@@ -13,7 +13,7 @@ class Settings extends StatelessWidget {
 
       extendBodyBehindAppBar: true,
       appBar: CupertinoNavigationBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
         leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, previousPageTitle: 'Back',onPressed: () => Navigator.pop(context),),
         middle: Text('Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
       ),

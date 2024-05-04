@@ -31,7 +31,7 @@ class _AddFoodState extends State<AddFood> {
 
               extendBodyBehindAppBar: true,
               appBar: CupertinoNavigationBar(
-                backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(225),
+                backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
                 leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, onPressed: () => Navigator.pop(context),),
                 middle: TextField(
                   controller: addFoodController,
@@ -55,16 +55,11 @@ class _AddFoodState extends State<AddFood> {
                     ),
                   ),
                 ),
-                // trailing: IconButton(
-                //   icon: const Icon(Icons.add),
-                //   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
-                // )
               ),
       
               body: ListView(
                 shrinkWrap: true,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).padding.top),
+                children: [                  
                   ...snapshot.data?.docs.where((element) => (element.data()['name'] as String).contains(addFoodController.text)).map<Widget>(
                     (e) => FoodTile(
                       Food(
@@ -87,8 +82,9 @@ class _AddFoodState extends State<AddFood> {
               ),
       
               floatingActionButton: FloatingActionButton(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {})))),
                 child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.create, () => setState(() {}))))
               ),
 
             );

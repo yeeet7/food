@@ -144,7 +144,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
           List<FoodEntry> awaitedFoods = [];
           for (int food = 0; food < (foods.data()?.entries.length ?? 0); food++) {
             var currentFood = foods.data()?.entries.toList()[food];
-            FoodEntry foodEntry = await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount'], currentFood?.key); //TODO! this is the problem (only if there is food in diary)
+            FoodEntry foodEntry = await FoodEntry.fromDiary(currentFood?.value['id'], currentFood?.value['amount'], currentFood?.key);
             awaitedFoods.add(foodEntry);
           }
           return MainPageInfo(awaitedFoods, userInfo);
@@ -473,4 +473,17 @@ Size textToSize(String text, TextStyle style) {
   TextPainter painter = TextPainter(text: TextSpan(text: text, style: style), textDirection: TextDirection.ltr);
   painter.layout();
   return painter.size;
+}
+
+enum WeightUnit {
+  kg,
+  lbs
+}
+enum HeightUnit {
+  cm,
+  inch,
+}
+enum VolumeUnit {
+  ml,
+  floz,
 }

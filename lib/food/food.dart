@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food/food/add_food.dart';
 import 'package:food/widgets/food_tile.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -80,6 +81,14 @@ class _FoodWidgetState extends State<FoodWidget> {
             ),
           )
         ):null,
+        trailing: widget.intent == FoodIntent.view ? IconButton(
+          icon: const FaIcon(FontAwesomeIcons.arrowRightToBracket, size: 24,),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFood()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => FoodWidget(FoodIntent.add, () => setState(() {}), food: widget.food,)));
+          },
+        ) : null,
       ),
 
       body: Container(

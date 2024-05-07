@@ -7,9 +7,7 @@ import 'package:food/food/food.dart';
 import 'package:food/widgets/food_tile.dart';
 
 class AddFood extends StatefulWidget {
-  const AddFood(this.setstate, {super.key});
-
-  final void Function() setstate;
+  const AddFood({super.key});
 
   @override
   State<AddFood> createState() => _AddFoodState();
@@ -74,7 +72,7 @@ class _AddFoodState extends State<AddFood> {
                         proteins: e.data()['proteins'] ?? 0.0,
                         fats: e.data()['fats'] ?? 0.0
                       ),
-                      setstate: () {widget.setstate.call(); setState(() {});},
+                      setstate: () {setState(() {});},
                     )
                   ).toList() ?? [],
                 ]

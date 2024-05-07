@@ -269,7 +269,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AddFood(()=>setState(() {})))),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFood())).then((value) => setState(() {})),
       ),
 
     );

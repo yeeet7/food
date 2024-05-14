@@ -449,7 +449,7 @@ class _FoodWidgetState extends State<FoodWidget> {
                         controller: [kcalCtrl, carbsCtrl, proteinsCtrl, fatsCtrl][index],
                         focusNode: [kcalNode, carbsNode, proteinsNode, fatsNode][index],
                         cursorColor: Colors.white70,
-                        keyboardType: TextInputType.number,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true, signed: false),
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
                           filled: true,

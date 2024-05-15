@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF8B0000),
         scaffoldBackgroundColor: const Color(0xFF141414),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF141414),
+          // backgroundColor: Color(0xFF141414),
+          backgroundColor: Color(0xFF1b1b1b),
           centerTitle: true,
           elevation: 1,
           shadowColor: Colors.black

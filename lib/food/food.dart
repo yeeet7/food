@@ -497,10 +497,10 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'unit': unit.index,
                 'imagePath': tempImage != null ? (await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').putFile(File(tempImage!)).then((p0) => p0.ref.fullPath)) : null,
                 'notes': notesCtrl.text,
-                'calories': int.tryParse(kcalCtrl.text) == null ? double.parse(kcalCtrl.text) : int.parse(kcalCtrl.text),
-                'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
-                'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),
-                'fats': int.tryParse(fatsCtrl.text) == null ? double.parse(fatsCtrl.text) : int.parse(fatsCtrl.text),
+                'calories': int.tryParse(kcalCtrl.text.replaceAll(',', '.')) == null ? double.parse(kcalCtrl.text.replaceAll(',', '.')) : int.parse(kcalCtrl.text.replaceAll(',', '.')),
+                'carbs': int.tryParse(carbsCtrl.text.replaceAll(',', '.')) == null ? double.parse(carbsCtrl.text.replaceAll(',', '.')) : int.parse(carbsCtrl.text.replaceAll(',', '.')),
+                'proteins': int.tryParse(proteinsCtrl.text.replaceAll(',', '.')) == null ? double.parse(proteinsCtrl.text.replaceAll(',', '.')) : int.parse(proteinsCtrl.text.replaceAll(',', '.')),
+                'fats': int.tryParse(fatsCtrl.text.replaceAll(',', '.')) == null ? double.parse(fatsCtrl.text.replaceAll(',', '.')) : int.parse(fatsCtrl.text.replaceAll(',', '.')),
               });
               widget.setstate.call();
               Navigator.pop(context);
@@ -513,10 +513,10 @@ class _FoodWidgetState extends State<FoodWidget> {
                 'unit': unit.index,
                 'imagePath': tempImageFile ? (tempImage != null ? (await FirebaseStorage.instance.ref('${FirebaseAuth.instance.currentUser?.uid}/${widget.food?.id}').putFile(File(tempImage!)).then((p0) => p0.ref.fullPath)) : null) : widget.food?.imagePath,
                 'notes': notesCtrl.text,
-                'calories': int.tryParse(kcalCtrl.text) == null ? double.parse(kcalCtrl.text) : int.parse(kcalCtrl.text),
-                'carbs': int.tryParse(carbsCtrl.text) == null ? double.parse(carbsCtrl.text) : int.parse(carbsCtrl.text),
-                'proteins': int.tryParse(proteinsCtrl.text) == null ? double.parse(proteinsCtrl.text) : int.parse(proteinsCtrl.text),
-                'fats': int.tryParse(fatsCtrl.text) == null ? double.parse(fatsCtrl.text) : int.parse(fatsCtrl.text),
+                'calories': int.tryParse(kcalCtrl.text.replaceAll(',', '.')) == null ? double.parse(kcalCtrl.text.replaceAll(',', '.')) : int.parse(kcalCtrl.text.replaceAll(',', '.')),
+                'carbs': int.tryParse(carbsCtrl.text.replaceAll(',', '.')) == null ? double.parse(carbsCtrl.text.replaceAll(',', '.')) : int.parse(carbsCtrl.text.replaceAll(',', '.')),
+                'proteins': int.tryParse(proteinsCtrl.text.replaceAll(',', '.')) == null ? double.parse(proteinsCtrl.text.replaceAll(',', '.')) : int.parse(proteinsCtrl.text.replaceAll(',', '.')),
+                'fats': int.tryParse(fatsCtrl.text.replaceAll(',', '.')) == null ? double.parse(fatsCtrl.text.replaceAll(',', '.')) : int.parse(fatsCtrl.text.replaceAll(',', '.')),
               }, SetOptions(merge: true));
               widget.setstate.call();
               Navigator.pop(context);

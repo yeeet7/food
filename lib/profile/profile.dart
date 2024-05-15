@@ -32,44 +32,11 @@ class _ProfileState extends State<Profile> {
         leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, previousPageTitle: 'Back', onPressed: () => Navigator.pop(context),),
 
         //!might change to just settings button
-        trailing: PopupMenuButton(
+        trailing: IconButton(
           color: Theme.of(context).colorScheme.primary,
-          icon: const Icon(Icons.more_vert_rounded, color: Colors.white,),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          icon: const Icon(Icons.settings, color: Colors.white,),
           constraints: const BoxConstraints(maxWidth: 124),
-          onSelected: (value) async {
-            if(value == 0) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings()));
-            } else if(value == 1) {
-              await googleSignIn.signOut();
-              await FirebaseAuth.instance.signOut();
-              Navigator.pop(context);
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 0,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.settings_rounded),
-                  SizedBox(width: 12),
-                  Text('Settings'),
-                ],
-              )
-            ),
-            PopupMenuItem(
-              value: 1,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.output_rounded, color: Theme.of(context).primaryColor),
-                  const SizedBox(width: 12),
-                  Text('Sign out', style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
-                ],
-              )
-            )
-          ]
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Settings())),
         )
       ),
 

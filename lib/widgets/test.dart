@@ -1,9 +1,7 @@
 
-import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -206,8 +204,8 @@ class _CupertinoAppBarBottomState extends State<CupertinoAppBarBottom> {
                     end: Alignment.bottomCenter,
                     stops: const [0,1],
                     colors: [
-                      Theme.of(context).appBarTheme.backgroundColor!,
-                      Theme.of(context).appBarTheme.backgroundColor!.withAlpha(200)
+                      Theme.of(context).appBarTheme.backgroundColor!.withAlpha(240),
+                      Theme.of(context).appBarTheme.backgroundColor!.withAlpha(220)
                     ]
                   ):null,
                   color: Theme.of(context).appBarTheme.backgroundColor

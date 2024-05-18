@@ -1,10 +1,8 @@
 
 import 'dart:developer';
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -47,16 +45,35 @@ class _TestPageState extends State<TestPage> with TickerProviderStateMixin {
             pinned: true,
             delegate: SliverPersistentChildHeaderDelegate(
               height: 46,
-              child: ClipRRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    height: 46,
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
+              child: SizedBox(
+                height: 46,
+                width: MediaQuery.of(context).size.width,
+                child: ClipRRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(220)
+                      ),
+                      position: DecorationPosition.background,
+                    ),
                   ),
                 ),
-              ),
+              )
+              // child: CupertinoNavigationBar(
+              //   automaticallyImplyLeading: false,
+              //   middle: CupertinoTextField(
+              //     placeholder: 'Search',
+              //     controller: _ctrl,
+              //     focusNode: _node,
+              //     prefix: Icon(CupertinoIcons.search, color: Colors.grey.shade600,),
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(6),
+              //       color: const Color(0xFF222222),
+              //     ),
+              //   ),
+              //   backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
+              // )
             )
           ),
           // SliverAppBar(

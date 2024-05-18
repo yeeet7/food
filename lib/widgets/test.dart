@@ -205,7 +205,7 @@ class _CupertinoAppBarBottomState extends State<CupertinoAppBarBottom> {
                     stops: const [0,1],
                     colors: [
                       Theme.of(context).appBarTheme.backgroundColor!.withAlpha(240),
-                      Theme.of(context).appBarTheme.backgroundColor!.withAlpha(220)
+                      Theme.of(context).appBarTheme.backgroundColor!.withAlpha(230),
                     ]
                   ):null,
                   color: Theme.of(context).appBarTheme.backgroundColor

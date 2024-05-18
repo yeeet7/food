@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food/main.dart';
+import 'package:food/widgets/test.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -43,7 +44,7 @@ List<Widget> _getChildren(BuildContext context) => [
     color: Theme.of(context).colorScheme.secondary,
     child: InkWell(
       borderRadius: BorderRadius.circular(12),
-      onTap: () {},
+      onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const TestPage()));},
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(

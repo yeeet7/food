@@ -152,7 +152,8 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         }.call(),
         builder: (context, snapshot) {
           return RefreshIndicator.adaptive(
-            color: Theme.of(context).colorScheme.secondary,
+            // color: Theme.of(context).colorScheme.secondary,
+            color: const Color(0xFF303030),
             onRefresh: () async {setState(() {});},
             child: ListView(
               padding: const EdgeInsets.all(12),

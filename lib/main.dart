@@ -32,6 +32,12 @@ void main() async {
 final googleSignIn = GoogleSignIn();
 late UserAmounts userInfo;
 
+/// Extracted from iOS 13.2 Beta.
+const Color _kActiveTickColor = CupertinoDynamicColor.withBrightness(
+  color: Color(0xFF3C3C44),
+  darkColor: Color(0xFFEBEBF5),
+);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -152,8 +158,7 @@ class _AppState extends State<App> with TickerProviderStateMixin {
         }.call(),
         builder: (context, snapshot) {
           return RefreshIndicator.adaptive(
-            // color: Theme.of(context).colorScheme.secondary,
-            color: const Color(0xFF303030),
+            color: _kActiveTickColor,
             onRefresh: () async {setState(() {});},
             child: ListView(
               padding: const EdgeInsets.all(12),

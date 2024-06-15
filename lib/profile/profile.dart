@@ -31,7 +31,6 @@ class _ProfileState extends State<Profile> {
         middle: Text('Hi ${FirebaseAuth.instance.currentUser?.displayName?.split(' ')[0] ?? ''}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),),
         leading: CupertinoNavigationBarBackButton(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, previousPageTitle: 'Back', onPressed: () => Navigator.pop(context),),
 
-        //!might change to just settings button
         trailing: IconButton(
           color: Theme.of(context).colorScheme.primary,
           icon: const Icon(Icons.settings, color: Colors.white,),

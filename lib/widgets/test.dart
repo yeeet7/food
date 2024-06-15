@@ -2,6 +2,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:super_cupertino_navigation_bar/super_cupertino_navigation_bar.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -17,85 +18,37 @@ class _TestPageState extends State<TestPage> with TickerProviderStateMixin {
     
     return Scaffold(
 
-      body: CustomScrollView(
-      
-        slivers: [
-      
-          const CupertinoSliverNavigationBar(
-            largeTitle: Text('test', style: TextStyle(color: Colors.white),),
-            leading: CupertinoNavigationBarBackButton(color: Colors.white, previousPageTitle: 'Back',),
-            border: null,
-          ),
-          const CupertinoAppBarBottom(),
+      body: PageView.builder(
+        itemBuilder:(context, index) => [
+          CustomScrollView(
           
-          // SliverPersistentHeader(
-          //   floating: false,
-          //   pinned: true,
-          //   delegate: SliverPersistentChildHeaderDelegate(
-          //     height: 46,
-          //     child: CupertinoNavigationBar(
-          //       automaticallyImplyLeading: false,
-          //       middle: CupertinoTextField(
-          //         placeholder: 'Search',
-          //         controller: _ctrl,
-          //         focusNode: _node,
-          //         prefix: Icon(CupertinoIcons.search, color: Colors.grey.shade600,),
-          //         decoration: BoxDecoration(
-          //           borderRadius: BorderRadius.circular(6),
-          //           color: const Color(0xFF222222),
-          //         ),
-          //       ),
-          //       backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
-          //     )
-          //   )
-          // ),
-      
-          // SliverAppBar(
-          //   automaticallyImplyLeading: false,
-          //   pinned: true,
-          //   toolbarHeight: 34,
-          //   centerTitle: true,
-          //   primary: false,
-          //   backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
-          //   bottom: PreferredSize(preferredSize: const Size.fromHeight(46), child: Container()),
-          //   actions: [
-          //     AnimatedBuilder(
-          //       animation: anim,
-          //       builder: (context, child) {
-          //         return Container(
-          //           constraints: BoxConstraints(maxWidth: Tween(begin: 62, end: 0).animate(anim).value.toDouble()),
-          //           child: CupertinoButton(
-          //             color: Colors.transparent,
-          //             padding: const EdgeInsets.only(right: 12),
-          //             onPressed: () {_node.unfocus(); _ctrl.clear(); setState(() {});},
-          //             child: Text(
-          //               'Cancel',
-          //               style: TextStyle(
-          //                 color: ColorTween(begin: Theme.of(context).primaryColor, end: Theme.of(context).primaryColor.withOpacity(0))
-          //                   .animate(anim).value
-          //               ),
-          //             ),
-          //           ),
-          //         );
-          //       }
-          //     )
-          //   ],
-          //   title: CupertinoTextField(
-          //     placeholder: 'Search',
-          //     controller: _ctrl,
-          //     focusNode: _node,
-          //     prefix: Icon(CupertinoIcons.search, color: Colors.grey.shade600,),
-          //     decoration: BoxDecoration(
-          //       borderRadius: BorderRadius.circular(6),
-          //       color: const Color(0xFF222222),
-          //     ),
-          //   ),
-          // ),
-      
-          SliverList.builder(itemBuilder: (context, index) => ListTile(leading: Text(index.toString()), tileColor: Colors.red,))
-      
-        ],
-      
+            slivers: [
+          
+              const CupertinoSliverNavigationBar(
+                largeTitle: Text('test', style: TextStyle(color: Colors.white),),
+                leading: CupertinoNavigationBarBackButton(color: Colors.white, previousPageTitle: 'Back',),
+                border: null,
+              ),
+              const CupertinoAppBarBottom(),
+          
+              SliverList.builder(itemBuilder: (context, index) => ListTile(leading: Text(index.toString()), tileColor: Colors.red,))
+          
+            ],
+          
+          ),
+          
+          SuperScaffold(
+            appBar: SuperAppBar(
+                largeTitle: SuperLargeTitle(largeTitle: 'test', textStyle: const TextStyle(color: Colors.white),),
+                leading: const CupertinoNavigationBarBackButton(color: Colors.white, previousPageTitle: 'Back',),
+                border: null,
+            ),
+
+            body: ListView.builder(itemBuilder: (context, index) => ListTile(leading: Text(index.toString()), tileColor: Colors.red,)),
+
+          )
+
+        ][index%2],
       ),
     );
   }

@@ -39,9 +39,11 @@ class _TestPageState extends State<TestPage> with TickerProviderStateMixin {
           
           SuperScaffold(
             appBar: SuperAppBar(
-                largeTitle: SuperLargeTitle(largeTitle: 'test', textStyle: const TextStyle(color: Colors.white),),
-                leading: const CupertinoNavigationBarBackButton(color: Colors.white, previousPageTitle: 'Back',),
-                border: null,
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withAlpha(200),
+              leading: CupertinoNavigationBarBackButton(previousPageTitle: 'Back',color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, onPressed: () => Navigator.pop(context),),
+              title: const Text('test', style: TextStyle(color: Colors.white)),
+              largeTitle: SuperLargeTitle(largeTitle: 'test'),
+              border: null,
             ),
 
             body: ListView.builder(itemBuilder: (context, index) => ListTile(leading: Text(index.toString()), tileColor: Colors.red,)),
